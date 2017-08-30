@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Daniel Berg <mail@roosta.sh>"]
 
 [dependencies]
+clap = {version = "2.19", features = ["yaml"]}
