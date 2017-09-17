@@ -1,0 +1,4 @@
+#!/bin/sh
+while inotifywait -e modify "resources/$1.ans"; do
+  make "resources/$1.latin1" && cat "resources/$1.latin1"
+done
