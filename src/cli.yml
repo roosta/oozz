@@ -5,4 +5,5 @@ about: WIP
 args:
   - INPUT:
       help: String to render with oozz
+      multiple: true
       required: true
