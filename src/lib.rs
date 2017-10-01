@@ -1,3 +1,5 @@
+use std::fs::File;
+use std::io::prelude::*;
 use std::error::Error;
 
 pub struct Config {
@@ -10,6 +12,7 @@ impl Config {
             return Err("not enough arguments");
         }
 
+        // let input = args.clone()[1..].join(" ");
         let input = args[1..].join(" ");
 
         Ok(Config { input })
@@ -21,7 +24,53 @@ impl Config {
 // 3. profit
 pub fn run(config: Config) -> Result<(), Box<Error>>{
 
-    println!("{}", &config.input);
+    let mut a = File::open("resources/chars/a.latin1")?;
+    let mut b = File::open("resources/chars/b.latin1")?;
+
+    let mut aa = String::new();
+    let mut bb = String::new();
+    a.read_to_string(&mut aa)?;
+    b.read_to_string(&mut bb)?;
+
+
+    // let mut iter = bb.chars().enumerate().map(|(i, c)| if i % 18 == 0 {
+
+    // } else {
+    //     c
+    // });
+//     fn titlecase_word(word: &str) -> String {
+//         word.chars().enumerate()
+//             .map(|(i, c)| if i == 0 { c.to_uppercase() } else { c.to_lowercase() })
+//             .collect()
+// }
+
+    let mut result = String::new();
+    for (i, c) in bb.chars().enumerate() {
+        if i % 18 == 0 {
+            result.push(c);
+            result.push('\n');
+        } else {
+            result.push(c);
+        }
+    }
+
+    println!("{}", result);
+
+    // println!("{}{}\n", aa, bb);
+
+    // for line in contents. {
+    //     println!("{}", line);
+    // }
+
+    // println!("{}", &config.input);
+    // let results = if config.case_sensitive {
+    //     search(&config.query, &contents)
+    // } else {
+    //     search_case_insensitive(&config.query, &contents)
+    // };
+
+
+    // println!("{}", &config.input);
     // let results = if config.case_sensitive {
     //     search(&config.query, &contents)
     // } else {
@@ -35,29 +84,29 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
     Ok(())
 }
 
-// pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-//     let mut results = Vec::new();
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
 
-//     for line in contents.lines() {
-//         if line.contains(query) {
-//             results.push(line);
-//         }
-//     }
-//     results
-// }
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+    results
+}
 
-// fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-//     let query = query.to_lowercase();
-//     let mut results = Vec::new();
+fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
+    let mut results = Vec::new();
 
-//     for line in contents.lines() {
-//         if line.to_lowercase().contains(&query) {
-//             results.push(line);
-//         }
-//     }
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query) {
+            results.push(line);
+        }
+    }
 
-//     results
-// }
+    results
+}
 
 // #[cfg(test)]
 // mod test {
