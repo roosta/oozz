@@ -32,6 +32,25 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
     a.read_to_string(&mut aa)?;
     b.read_to_string(&mut bb)?;
 
+    let mut a_result: Vec<&str> = Vec::new();
+    let mut b_result: Vec<&str> = Vec::new();
+
+    for line in aa.lines() {
+        a_result.push(line);
+    }
+
+    for line in bb.lines() {
+        b_result.push(line);
+    }
+
+    for asd in a_result.iter().zip(b_result.iter()) {
+        let (a, b) = asd;
+        println!("{}{}", a, b);
+    }
+
+
+    // println!("{}", result);
+
 
     // let mut iter = bb.chars().enumerate().map(|(i, c)| if i % 18 == 0 {
 
@@ -44,17 +63,17 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 //             .collect()
 // }
 
-    let mut result = String::new();
-    for (i, c) in bb.chars().enumerate() {
-        if i % 18 == 0 {
-            result.push(c);
-            result.push('\n');
-        } else {
-            result.push(c);
-        }
-    }
+    // let mut result = String::new();
+    // for (i, c) in bb.chars().enumerate() {
+    //     if i % 18 == 0 {
+    //         result.push(c);
+    //         result.push('\n');
+    //     } else {
+    //         result.push(c);
+    //     }
+    // }
 
-    println!("{}", result);
+    // println!("{}", result);
 
     // println!("{}{}\n", aa, bb);
 
