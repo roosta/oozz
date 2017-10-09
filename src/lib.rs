@@ -1,10 +1,13 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::error::Error;
+use std::collections::HashMap;
 
 pub struct Config {
     pub input: String,
 }
+
+const LETTER_HEIGHT: u32 = 16;
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -19,34 +22,43 @@ impl Config {
     }
 }
 
-// 1. read each for file
-// 2. for each 18 chars, put string in vector
-// 3. profit
-pub fn run(config: Config) -> Result<(), Box<Error>>{
+fn read_font() -> Result<HashMap<String, String>, Box<Error>> {
+    let mut font = File::open("resources/charssdad.latin1")?;
+    let mut chars = String::new();
+    let mut map = HashMap::new();
 
-    let mut a = File::open("resources/chars/a.latin1")?;
-    let mut b = File::open("resources/chars/b.latin1")?;
+    font.read_to_string(&mut chars)?;
 
-    let mut aa = String::new();
-    let mut bb = String::new();
-    a.read_to_string(&mut aa)?;
-    b.read_to_string(&mut bb)?;
+    Ok(map)
+}
+// 1. read files in one succinct operation
+// 2. iterate over input string LETTER_HEIGHT and concact each line into a single string
+// 3. print strings
+pub fn run(config: Config) -> Result<(), Box<Error>> {
 
-    let mut a_result: Vec<&str> = Vec::new();
-    let mut b_result: Vec<&str> = Vec::new();
+    let mut font = File::open("resources/chars.latin1")?;
+    let mut chars = String::new();
+    font.read_to_string(&mut chars);
 
-    for line in aa.lines() {
-        a_result.push(line);
-    }
+    let asd = read_font()?;
 
-    for line in bb.lines() {
-        b_result.push(line);
-    }
+    // let mut a_result: Vec<&str> = Vec::new();
+    // let mut b_result: Vec<&str> = Vec::new();
 
-    for asd in a_result.iter().zip(b_result.iter()) {
-        let (a, b) = asd;
-        println!("{}{}", a, b);
-    }
+    // for line in aa.lines() {
+    //     a_result.push(line);
+    // }
+
+    // for line in bb.lines() {
+    //     b_result.push(line);
+    // }
+
+    // for asd in a_result.iter().zip(b_result.iter()) {
+    //     let (a, b) = asd;
+    //     print!("{}", a);
+    //     print!("{}", b);
+    //     println!();
+    // }
 
 
     // println!("{}", result);
@@ -103,29 +115,29 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
     Ok(())
 }
 
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
+// pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+//     let mut results = Vec::new();
 
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-    results
-}
+//     for line in contents.lines() {
+//         if line.contains(query) {
+//             results.push(line);
+//         }
+//     }
+//     results
+// }
 
-fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let query = query.to_lowercase();
-    let mut results = Vec::new();
+// fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+//     let query = query.to_lowercase();
+//     let mut results = Vec::new();
 
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&query) {
-            results.push(line);
-        }
-    }
+//     for line in contents.lines() {
+//         if line.to_lowercase().contains(&query) {
+//             results.push(line);
+//         }
+//     }
 
-    results
-}
+//     results
+// }
 
 // #[cfg(test)]
 // mod test {
