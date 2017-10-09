@@ -7,7 +7,8 @@ pub struct Config {
     pub input: String,
 }
 
-const LETTER_HEIGHT: u32 = 16;
+const LETTER_HEIGHT: usize = 17;
+const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.!";
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -22,12 +23,29 @@ impl Config {
     }
 }
 
-fn read_font() -> Result<HashMap<String, String>, Box<Error>> {
-    let mut font = File::open("resources/charssdad.latin1")?;
+fn read_font() -> Result<HashMap<char, Vec<String>>, Box<Error>> {
+
+    let mut font = File::open("resources/chars.latin1")?;
+
     let mut chars = String::new();
+    font.read_to_string(&mut chars)?;
+
     let mut map = HashMap::new();
 
-    font.read_to_string(&mut chars)?;
+    // println!("{:?}", chars.lines().nth(0));
+
+    for character in LETTERS.chars().enumerate() {
+        let (i, c) = character;
+        let first = i * LETTER_HEIGHT;
+        let last = first + LETTER_HEIGHT;
+        let result = Vec::new();
+        // println!("first: {}, last: {}", first, last);
+        for n in first..last {
+            let line = chars.lines().nth(n).ok_or("Failed to get line nr")?;
+            result.push(line)
+        }
+        map.insert(c, result);
+    }
 
     Ok(map)
 }
@@ -35,12 +53,9 @@ fn read_font() -> Result<HashMap<String, String>, Box<Error>> {
 // 2. iterate over input string LETTER_HEIGHT and concact each line into a single string
 // 3. print strings
 pub fn run(config: Config) -> Result<(), Box<Error>> {
-
-    let mut font = File::open("resources/chars.latin1")?;
-    let mut chars = String::new();
-    font.read_to_string(&mut chars);
-
-    let asd = read_font()?;
+    let font = read_font()?;
+    let a = font.get(&'a').ok_or("Failed to get letter from font")?;
+    println!("{:?}", a);
 
     // let mut a_result: Vec<&str> = Vec::new();
     // let mut b_result: Vec<&str> = Vec::new();
