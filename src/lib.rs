@@ -60,17 +60,20 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let extra = read_file("extra")?;
     let parsed_font = parse_string(&font[..], LETTERS);
     let parsed_extra = parse_string(&extra[..], SYMBOLS);
+    let start = parsed_extra.get(&'[').ok_or("Couldn't retrive start character from parsed_extra")?;
+    let stop = parsed_extra.get(&']').ok_or("Couldn't retrive end character from parsed_extra")?;
 
     let input = &config.input;
     let mut output = Vec::new();
 
     // println!("{:?}", chars.get(&']').ok_or("Couldn't retrieve character from parsed font")?);
     for n in 0..LETTER_HEIGHT {
-        let mut line = String::new();
+        let mut line = String::from(start[n]);
         for input_char in input.chars() {
             let output_char = parsed_font.get(&input_char).ok_or("Couldn't retrieve character from parsed font")?;
             line = line + output_char[n];
         }
+        line = line + stop[n];
         output.push(line)
     }
 
