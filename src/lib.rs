@@ -23,39 +23,41 @@ impl Config {
     }
 }
 
-fn read_font() -> Result<HashMap<char, Vec<String>>, Box<Error>> {
-
-    let mut font = File::open("resources/chars.latin1")?;
-
-    let mut chars = String::new();
-    font.read_to_string(&mut chars)?;
+fn parse_letters(font: &str) -> HashMap<char, Vec<&str>> {
 
     let mut map = HashMap::new();
-
-    // println!("{:?}", chars.lines().nth(0));
 
     for character in LETTERS.chars().enumerate() {
         let (i, c) = character;
         let first = i * LETTER_HEIGHT;
         let last = first + LETTER_HEIGHT;
-        let result = Vec::new();
-        // println!("first: {}, last: {}", first, last);
+        let mut result = Vec::new();
         for n in first..last {
-            let line = chars.lines().nth(n).ok_or("Failed to get line nr")?;
+            let line = font.lines().nth(n).expect("Failed to retrieve line");
             result.push(line)
         }
         map.insert(c, result);
     }
-
-    Ok(map)
+    return map;
 }
+
+fn read_font() -> Result<String, Box<Error>> {
+
+    let mut file = File::open("resources/chars.latin1")?;
+    let mut font = String::new();
+    file.read_to_string(&mut font)?;
+
+    Ok(font)
+}
+
 // 1. read files in one succinct operation
 // 2. iterate over input string LETTER_HEIGHT and concact each line into a single string
 // 3. print strings
 pub fn run(config: Config) -> Result<(), Box<Error>> {
     let font = read_font()?;
-    let a = font.get(&'a').ok_or("Failed to get letter from font")?;
-    println!("{:?}", a);
+    let chars = parse_letters(&font[..]);
+
+    let target = &config.input;
 
     // let mut a_result: Vec<&str> = Vec::new();
     // let mut b_result: Vec<&str> = Vec::new();
