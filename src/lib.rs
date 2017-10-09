@@ -55,10 +55,20 @@ fn read_font() -> Result<String, Box<Error>> {
 // 3. print strings
 pub fn run(config: Config) -> Result<(), Box<Error>> {
     let font = read_font()?;
-    let chars = parse_letters(&font[..]);
+    let parsed_font = parse_letters(&font[..]);
 
-    let target = &config.input;
+    let input = &config.input;
 
+    // println!("{:?}", chars.get(&']').ok_or("Couldn't retrieve character from parsed font")?);
+    for n in 0..LETTER_HEIGHT {
+        for input_char in input.chars() {
+            let output_char = parsed_font.get(&input_char).ok_or("Couldn't retrieve character from parsed font")?;
+            print!("{}", output_char[n]);
+        }
+        println!();
+    }
+
+    // }
     // let mut a_result: Vec<&str> = Vec::new();
     // let mut b_result: Vec<&str> = Vec::new();
 
