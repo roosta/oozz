@@ -1,5 +1,5 @@
 DIR = resources
-SRC = chars.ans
+SRC = chars.ans extra.ans
 
 LATIN1 = $(SRC:%.ans=$(DIR)/%.latin1)
 	
