@@ -9,6 +9,8 @@ pub struct Config {
 
 const LETTER_HEIGHT: usize = 17;
 const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.!";
+const SYMBOLS: &str = "[]";
+const INIT: &str = "[0;1;40;32m";
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -23,17 +25,17 @@ impl Config {
     }
 }
 
-fn parse_letters(font: &str) -> HashMap<char, Vec<&str>> {
+fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>> {
 
     let mut map = HashMap::new();
 
-    for character in LETTERS.chars().enumerate() {
+    for character in letters.chars().enumerate() {
         let (i, c) = character;
         let first = i * LETTER_HEIGHT;
         let last = first + LETTER_HEIGHT;
         let mut result = Vec::new();
         for n in first..last {
-            let line = font.lines().nth(n).expect("Failed to retrieve line");
+            let line = input.lines().nth(n).expect("Failed to retrieve line");
             result.push(line)
         }
         map.insert(c, result);
@@ -41,32 +43,43 @@ fn parse_letters(font: &str) -> HashMap<char, Vec<&str>> {
     return map;
 }
 
-fn read_font() -> Result<String, Box<Error>> {
+fn read_file(f: &str) -> Result<String, Box<Error>> {
 
-    let mut file = File::open("resources/chars.latin1")?;
-    let mut font = String::new();
-    file.read_to_string(&mut font)?;
+    let mut file = File::open(format!("resources/{}.latin1", f))?;
+    let mut string = String::new();
+    file.read_to_string(&mut string)?;
 
-    Ok(font)
+    Ok(string)
 }
 
 // 1. read files in one succinct operation
 // 2. iterate over input string LETTER_HEIGHT and concact each line into a single string
 // 3. print strings
 pub fn run(config: Config) -> Result<(), Box<Error>> {
-    let font = read_font()?;
-    let parsed_font = parse_letters(&font[..]);
+    let font = read_file("chars")?;
+    let extra = read_file("extra")?;
+    let parsed_font = parse_string(&font[..], LETTERS);
+    let parsed_extra = parse_string(&extra[..], SYMBOLS);
 
     let input = &config.input;
+    let mut output = Vec::new();
 
     // println!("{:?}", chars.get(&']').ok_or("Couldn't retrieve character from parsed font")?);
     for n in 0..LETTER_HEIGHT {
+        let mut line = String::new();
         for input_char in input.chars() {
             let output_char = parsed_font.get(&input_char).ok_or("Couldn't retrieve character from parsed font")?;
-            print!("{}", output_char[n]);
+            line = line + output_char[n];
         }
-        println!();
+        output.push(line)
     }
+
+    for asd in output {
+        println!("{}", asd);
+    }
+
+
+    // println!("{:?}", parsed_extra);
 
     // }
     // let mut a_result: Vec<&str> = Vec::new();
