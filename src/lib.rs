@@ -62,9 +62,6 @@ fn parse_oozz(input: &str) -> Vec<Vec<&str>> {
     out
 }
 
-// 1. read files in one succinct operation
-// 2. iterate over input string LETTER_HEIGHT and concact each line into a single string
-// 3. print strings
 pub fn run(config: Config) -> Result<(), Box<Error>> {
     let font = read_file("chars")?;
     let extra = read_file("extra")?;

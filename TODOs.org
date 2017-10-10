@@ -2,3 +2,5 @@
 * TODO Trim inital escape codes from letters
 * DONE Add space char
   CLOSED: [2017-10-10 Tue 19:35]
+* TODO Store all font stuff in enum
+* TODO Try printing using whole characters
