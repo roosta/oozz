@@ -8,9 +8,9 @@ pub struct Config {
 }
 
 const LETTER_HEIGHT: usize = 17;
-const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.!";
+const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.! ";
 const SYMBOLS: &str = "[]";
-const INIT: &str = "[0;1;40;32m";
+// const INIT: &str = "[0;1;40;32m";
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -52,12 +52,18 @@ fn read_file(f: &str) -> Result<String, Box<Error>> {
     Ok(string)
 }
 
+
+fn parse_oozz() {
+
+}
+
 // 1. read files in one succinct operation
 // 2. iterate over input string LETTER_HEIGHT and concact each line into a single string
 // 3. print strings
 pub fn run(config: Config) -> Result<(), Box<Error>> {
     let font = read_file("chars")?;
     let extra = read_file("extra")?;
+    let oozz = read_file("oozz")?;
     let parsed_font = parse_string(&font[..], LETTERS);
     let parsed_extra = parse_string(&extra[..], SYMBOLS);
     let start = parsed_extra.get(&'[').ok_or("Couldn't retrive start character from parsed_extra")?;
@@ -77,110 +83,20 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         output.push(line)
     }
 
-    for asd in output {
-        println!("{}", asd);
+    for out in output {
+        println!("{}", out);
     }
 
 
-    // println!("{:?}", parsed_extra);
-
-    // }
-    // let mut a_result: Vec<&str> = Vec::new();
-    // let mut b_result: Vec<&str> = Vec::new();
-
-    // for line in aa.lines() {
-    //     a_result.push(line);
-    // }
-
-    // for line in bb.lines() {
-    //     b_result.push(line);
-    // }
-
-    // for asd in a_result.iter().zip(b_result.iter()) {
-    //     let (a, b) = asd;
-    //     print!("{}", a);
-    //     print!("{}", b);
-    //     println!();
-    // }
-
-
-    // println!("{}", result);
-
-
-    // let mut iter = bb.chars().enumerate().map(|(i, c)| if i % 18 == 0 {
-
-    // } else {
-    //     c
-    // });
 //     fn titlecase_word(word: &str) -> String {
 //         word.chars().enumerate()
 //             .map(|(i, c)| if i == 0 { c.to_uppercase() } else { c.to_lowercase() })
 //             .collect()
 // }
 
-    // let mut result = String::new();
-    // for (i, c) in bb.chars().enumerate() {
-    //     if i % 18 == 0 {
-    //         result.push(c);
-    //         result.push('\n');
-    //     } else {
-    //         result.push(c);
-    //     }
-    // }
-
-    // println!("{}", result);
-
-    // println!("{}{}\n", aa, bb);
-
-    // for line in contents. {
-    //     println!("{}", line);
-    // }
-
-    // println!("{}", &config.input);
-    // let results = if config.case_sensitive {
-    //     search(&config.query, &contents)
-    // } else {
-    //     search_case_insensitive(&config.query, &contents)
-    // };
-
-
-    // println!("{}", &config.input);
-    // let results = if config.case_sensitive {
-    //     search(&config.query, &contents)
-    // } else {
-    //     search_case_insensitive(&config.query, &contents)
-    // };
-
-    // for line in results {
-    //     println!("{}", line);
-    // }
-
     Ok(())
 }
 
-// pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-//     let mut results = Vec::new();
-
-//     for line in contents.lines() {
-//         if line.contains(query) {
-//             results.push(line);
-//         }
-//     }
-//     results
-// }
-
-// fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-//     let query = query.to_lowercase();
-//     let mut results = Vec::new();
-
-//     for line in contents.lines() {
-//         if line.to_lowercase().contains(&query) {
-//             results.push(line);
-//         }
-//     }
-
-//     results
-// }
 
 // #[cfg(test)]
 // mod test {

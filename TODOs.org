@@ -1,3 +1,4 @@
 * TODO Validate input
 * TODO Trim inital escape codes from letters
-* TODO Add space char
+* DONE Add space char
+  CLOSED: [2017-10-10 Tue 19:35]
