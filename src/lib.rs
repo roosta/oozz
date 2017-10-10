@@ -9,6 +9,7 @@ pub struct Config {
 
 const LETTER_HEIGHT: usize = 17;
 const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.! ";
+const OOZZ_HEIGHT: usize = 22;
 const SYMBOLS: &str = "[]";
 // const INIT: &str = "[0;1;40;32m";
 
@@ -52,9 +53,13 @@ fn read_file(f: &str) -> Result<String, Box<Error>> {
     Ok(string)
 }
 
-
-fn parse_oozz() {
-
+fn parse_oozz(input: &str) -> Vec<Vec<&str>> {
+    let mut out: Vec<Vec<&str>> = Vec::new();
+    let mut lines: Vec<&str> = input.lines().collect();
+    while !lines.is_empty() {
+        out.push(lines.drain(..OOZZ_HEIGHT).collect());
+    }
+    out
 }
 
 // 1. read files in one succinct operation
@@ -66,13 +71,13 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let oozz = read_file("oozz")?;
     let parsed_font = parse_string(&font[..], LETTERS);
     let parsed_extra = parse_string(&extra[..], SYMBOLS);
+    let parsed_oozz = parse_oozz(&oozz[..]);
     let start = parsed_extra.get(&'[').ok_or("Couldn't retrive start character from parsed_extra")?;
     let stop = parsed_extra.get(&']').ok_or("Couldn't retrive end character from parsed_extra")?;
 
     let input = &config.input;
     let mut output = Vec::new();
 
-    // println!("{:?}", chars.get(&']').ok_or("Couldn't retrieve character from parsed font")?);
     for n in 0..LETTER_HEIGHT {
         let mut line = String::from(start[n]);
         for input_char in input.chars() {
@@ -87,6 +92,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         println!("{}", out);
     }
 
+    println!("{:#?}", parsed_oozz);
 
 //     fn titlecase_word(word: &str) -> String {
 //         word.chars().enumerate()
