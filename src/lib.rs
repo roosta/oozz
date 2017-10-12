@@ -64,6 +64,20 @@ fn parse_oozz(input: &str) -> Vec<Vec<&str>> {
     out
 }
 
+fn produce_output() {
+
+}
+
+fn choose_oozz<'a>(input: &str, oozz: &'a Vec<Vec<&str>>) -> Vec<Vec<&'a str>> {
+    let mut rng = rand::thread_rng();
+    let mut out = Vec::new();
+    for _ in input.chars() {
+        let chosen = rng.choose(&oozz).expect("Failed to randomly choose an oozz character from parsed");
+        out.push(chosen.to_vec());
+    }
+    out
+}
+
 pub fn run(config: Config) -> Result<(), Box<Error>> {
 
     let chars = read_file("chars")?;
@@ -74,24 +88,15 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let extra = parse_string(&extra[..], SYMBOLS);
     let mut oozz = parse_oozz(&oozz[..]);
 
-    // Save the first and last char in oozz, since they're start and end stops
     let oozz_start = oozz.remove(0);
     let oozz_stop = oozz.pop().ok_or("Failed to retrieve start character from oozz")?;
 
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
     let chars_stop = extra.get(&']').ok_or("Couldn't retrive end character from extra")?;
 
-    let mut rng = rand::thread_rng();
-
-    let mut chosen_oozz:Vec<Vec<&str>> = Vec::new();
-
     let input = &config.input;
 
-    println!("{:#?}", oozz);
-    for _ in input.chars() {
-        let chosen = rng.choose(&oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
-        chosen_oozz.push(chosen.to_vec());
-    }
+    let oozz = choose_oozz(&input, &oozz);
 
     let mut output = Vec::new();
 
