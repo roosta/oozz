@@ -2,3 +2,6 @@
 name = "oozz"
 version = "0.1.0"
 authors = ["Daniel Berg <mail@roosta.sh>"]
+
+[dependencies]
+rand = "0.3.17"
