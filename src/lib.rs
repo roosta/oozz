@@ -1,7 +1,9 @@
+extern crate rand;
 use std::fs::File;
 use std::io::prelude::*;
 use std::error::Error;
 use std::collections::HashMap;
+use rand::Rng;
 
 pub struct Config {
     pub input: String,
@@ -63,33 +65,60 @@ fn parse_oozz(input: &str) -> Vec<Vec<&str>> {
 }
 
 pub fn run(config: Config) -> Result<(), Box<Error>> {
-    let font = read_file("chars")?;
+
+    let chars = read_file("chars")?;
     let extra = read_file("extra")?;
     let oozz = read_file("oozz")?;
-    let parsed_font = parse_string(&font[..], LETTERS);
-    let parsed_extra = parse_string(&extra[..], SYMBOLS);
-    let parsed_oozz = parse_oozz(&oozz[..]);
-    let start = parsed_extra.get(&'[').ok_or("Couldn't retrive start character from parsed_extra")?;
-    let stop = parsed_extra.get(&']').ok_or("Couldn't retrive end character from parsed_extra")?;
+
+    let chars = parse_string(&chars[..], LETTERS);
+    let extra = parse_string(&extra[..], SYMBOLS);
+    let mut oozz = parse_oozz(&oozz[..]);
+
+    // Save the first and last char in oozz, since they're start and end stops
+    let oozz_start = oozz.remove(0);
+    let oozz_stop = oozz.pop().ok_or("Failed to retrieve start character from oozz")?;
+
+    let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
+    let chars_stop = extra.get(&']').ok_or("Couldn't retrive end character from extra")?;
+
+    let mut rng = rand::thread_rng();
+
+    let mut chosen_oozz:Vec<Vec<&str>> = Vec::new();
 
     let input = &config.input;
+
+    println!("{:#?}", oozz);
+    for _ in input.chars() {
+        let chosen = rng.choose(&oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
+        chosen_oozz.push(chosen.to_vec());
+    }
+
     let mut output = Vec::new();
 
     for n in 0..LETTER_HEIGHT {
-        let mut line = String::from(start[n]);
+        let mut line = String::from(chars_start[n]);
         for input_char in input.chars() {
-            let output_char = parsed_font.get(&input_char).ok_or("Couldn't retrieve character from parsed font")?;
+            let output_char = chars.get(&input_char).ok_or("Failed to retrieve character from chars")?;
             line = line + output_char[n];
         }
-        line = line + stop[n];
+        line = line + chars_stop[n];
         output.push(line)
+    }
+    for n in 0..OOZZ_HEIGHT {
+        let mut line = String::from(oozz_start[n]);
+        for input_char in input.chars().enumerate() {
+            let (i, _) = input_char;
+            let output_char = oozz.get(i).ok_or("Failed to retrieve character from oozz")?;
+            line = line + output_char[n];
+        }
+        line = line + oozz_stop[n];
+        output.push(line);
     }
 
     for out in output {
         println!("{}", out);
     }
 
-    println!("{:#?}", parsed_oozz);
 
 //     fn titlecase_word(word: &str) -> String {
 //         word.chars().enumerate()
