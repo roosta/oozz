@@ -5,3 +5,4 @@ authors = ["Daniel Berg <mail@roosta.sh>"]
 
 [dependencies]
 rand = "0.3.17"
+regex = "0.2"
