@@ -73,7 +73,7 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
                 0
             }
         };
-        let pad: String = (0..pad_count).map(|_| " ").collect();
+        let pad: String = (1..pad_count).map(|_| " ").collect();
         // let asd = String::from(line) + &pad[..];
         padded.push(String::from(line) + &pad[..]);
         // println!("{}", String::from(line) + &pad[..]);
@@ -114,8 +114,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let extra = parse_string(&extra[..], SYMBOLS);
     let mut oozz = parse_oozz(&oozz[..]);
 
-    let oozz_start = oozz.remove(0);
-    let oozz_stop = oozz.pop().ok_or("Failed to retrieve start character from oozz")?;
+    let oozz_stop = "─┘";
+    let oozz_start = "└─";
 
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
     let chars_stop = extra.get(&']').ok_or("Couldn't retrive end character from extra")?;
@@ -138,13 +138,18 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         output.push(line)
     }
     for n in 0..OOZZ_HEIGHT {
-        let mut line = oozz_start[n].to_owned();
+        let mut line = String::new();
+        if n == 0 {
+           line = line + oozz_start;
+        }
         for input_char in input.chars().enumerate() {
             let (i, _) = input_char;
             let output_char = oozz.get(i).ok_or("Failed to retrieve character from oozz")?;
             line = line + &output_char[n][..];
         }
-        line = line + &oozz_stop[n][..];
+        if n == 0 {
+            line = line + oozz_stop;
+        }
         output.push(line);
     }
 
