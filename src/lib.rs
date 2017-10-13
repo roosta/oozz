@@ -74,15 +74,7 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
             }
         };
         let pad: String = (1..pad_count).map(|_| " ").collect();
-        // let asd = String::from(line) + &pad[..];
         padded.push(String::from(line) + &pad[..]);
-        // println!("{}", String::from(line) + &pad[..]);
-        // let () = asd + &pad[..];
-
-        // let () = line;
-        // padded.push(line + pad[..]);
-        // let size = line.chars().count();
-        // println!("{}", size);
     }
     while !padded.is_empty() {
         out.push(padded.drain(..OOZZ_HEIGHT).collect());
@@ -90,9 +82,9 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
     out
 }
 
-fn produce_output() {
+// fn produce_output() {
 
-}
+// }
 
 fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     let mut rng = rand::thread_rng();
@@ -112,7 +104,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
     let chars = parse_string(&chars[..], LETTERS);
     let extra = parse_string(&extra[..], SYMBOLS);
-    let mut oozz = parse_oozz(&oozz[..]);
+    let oozz = parse_oozz(&oozz[..]);
 
     let oozz_stop = "─┘";
     let oozz_start = "└─";
