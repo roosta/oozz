@@ -1,4 +1,7 @@
 extern crate rand;
+extern crate regex;
+
+use regex::Regex;
 use std::fs::File;
 use std::io::prelude::*;
 use std::error::Error;
@@ -55,11 +58,34 @@ fn read_file(f: &str) -> Result<String, Box<Error>> {
     Ok(string)
 }
 
-fn parse_oozz(input: &str) -> Vec<Vec<&str>> {
-    let mut out: Vec<Vec<&str>> = Vec::new();
-    let mut lines: Vec<&str> = input.lines().collect();
-    while !lines.is_empty() {
-        out.push(lines.drain(..OOZZ_HEIGHT).collect());
+fn parse_oozz(input: &str) -> Vec<Vec<String>> {
+    let mut out: Vec<Vec<String>> = Vec::new();
+    // let mut raw: Vec<&str> = input.lines().collect();
+    let mut padded: Vec<String> = Vec::new();
+    let re = Regex::new(r"\x1b[^m]*m").unwrap();
+    for line in input.lines() {
+        let trimmed = re.replace_all(line, "");
+        let count = trimmed.chars().count();
+        let pad_count = {
+            if count < 18 {
+                18 - count
+            } else {
+                0
+            }
+        };
+        let pad: String = (0..pad_count).map(|_| " ").collect();
+        // let asd = String::from(line) + &pad[..];
+        padded.push(String::from(line) + &pad[..]);
+        // println!("{}", String::from(line) + &pad[..]);
+        // let () = asd + &pad[..];
+
+        // let () = line;
+        // padded.push(line + pad[..]);
+        // let size = line.chars().count();
+        // println!("{}", size);
+    }
+    while !padded.is_empty() {
+        out.push(padded.drain(..OOZZ_HEIGHT).collect());
     }
     out
 }
@@ -68,7 +94,7 @@ fn produce_output() {
 
 }
 
-fn choose_oozz<'a>(input: &str, oozz: &'a Vec<Vec<&str>>) -> Vec<Vec<&'a str>> {
+fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     let mut rng = rand::thread_rng();
     let mut out = Vec::new();
     for _ in input.chars() {
@@ -98,6 +124,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
     let oozz = choose_oozz(&input, &oozz);
 
+    // println!("{:#?}", oozz);
+
     let mut output = Vec::new();
 
     for n in 0..LETTER_HEIGHT {
@@ -110,13 +138,13 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         output.push(line)
     }
     for n in 0..OOZZ_HEIGHT {
-        let mut line = String::from(oozz_start[n]);
+        let mut line = oozz_start[n].to_owned();
         for input_char in input.chars().enumerate() {
             let (i, _) = input_char;
             let output_char = oozz.get(i).ok_or("Failed to retrieve character from oozz")?;
-            line = line + output_char[n];
+            line = line + &output_char[n][..];
         }
-        line = line + oozz_stop[n];
+        line = line + &oozz_stop[n][..];
         output.push(line);
     }
 
