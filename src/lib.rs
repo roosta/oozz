@@ -8,15 +8,24 @@ use std::error::Error;
 use std::collections::HashMap;
 use rand::Rng;
 
+// Define letter and oozz height
+const LETTER_HEIGHT: usize = 17;
+const OOZZ_HEIGHT: usize = 22;
+
+// Available letters in font
+const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.! ";
+
+// Start and end stop symbols
+const SYMBOLS: &str = "[]";
+
+// Visible character width. A character actually has an arbitrary width when
+// including escape sequences, but this is the visible width
+const CHAR_WIDTH: usize = 18;
+// const INIT: &str = "[0;1;40;32m";
+
 pub struct Config {
     pub input: String,
 }
-
-const LETTER_HEIGHT: usize = 17;
-const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.! ";
-const OOZZ_HEIGHT: usize = 22;
-const SYMBOLS: &str = "[]";
-// const INIT: &str = "[0;1;40;32m";
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -31,6 +40,8 @@ impl Config {
     }
 }
 
+/// Function to parse character font, and extra characters. Split up input files
+/// into hashmap and use char it represents as a key
 fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>> {
 
     let mut map = HashMap::new();
@@ -49,6 +60,7 @@ fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>
     return map;
 }
 
+/// Read a latin1 file and produce content as a string
 fn read_file(f: &str) -> Result<String, Box<Error>> {
 
     let mut file = File::open(format!("resources/{}.latin1", f))?;
@@ -58,32 +70,63 @@ fn read_file(f: &str) -> Result<String, Box<Error>> {
     Ok(string)
 }
 
+/// Parses the oozz character font.
+///
+/// Due to the way the program I use to draw ANSI art represents whitespace,
+/// this function has to do some gymnastics to construct the output lines when
+/// they are composed together.
+///
+/// In the resource file oozz.ans trailing whitespace is not included, which is
+/// an issue then composing lengths of string based on arbitrary input.
+/// Furthermore, whitespace that is included is represented using `Esc[ValueC`
+/// where value is the amount the cursor is moved forward. Again an issue if you
+/// are composing together sets of characters and trying to calculate a fixed
+/// width based on what you can see.
+///
+/// This is solved by calculating a whitespace padding by counting missing
+/// whitespace (trimmed away from end of line) taking into account the escaped
+/// cursor movement.
+///
+/// Just wanted to add all this here so maybe this code makes sense down the
+/// road.
 fn parse_oozz(input: &str) -> Vec<Vec<String>> {
     let mut out: Vec<Vec<String>> = Vec::new();
     let mut padded: Vec<String> = Vec::new();
+
+    // Create a regexp that captures all escape sequences in input
+    // and one that captures cursor_forward escapes.
     let all_escape_re = Regex::new(r"\x1b[^m]*m").unwrap();
     let cursor_forward_re = Regex::new(r"(\x1b\[)([0-9]+)(C)").unwrap();
+
     for line in input.lines() {
-        let trimmed = all_escape_re.replace_all(line, "");
+
+        // capture all cursor forward padding in input string
         let mut captured_padding = 0;
         for cap in cursor_forward_re.captures_iter(line) {
             captured_padding = captured_padding + &cap[2].parse::<usize>().expect("Failed to parse cursor_forward_re capture");
         }
+
+        // remove all escapes from input, and count chars
+        let trimmed = all_escape_re.replace_all(line, "");
         let count = trimmed.chars().count();
-        let pad_count = 18 - count - captured_padding;
+
+        // calculate padding based on a constant visible width (CHAR_WIDTH)
+        // substracting the count from above and the captured_padding from escape sequences
+        let pad_count = CHAR_WIDTH - count - captured_padding;
+
+        // construct a padded string that is prepended to the line from unprocessed input
         let pad: String = (0..pad_count).map(|_| " ").collect();
         padded.push(String::from(line) + &pad[..]);
     }
+
+    // finally split into characters and return
     while !padded.is_empty() {
         out.push(padded.drain(..OOZZ_HEIGHT).collect());
     }
     out
 }
 
-// fn produce_output() {
-
-// }
-
+/// Choose some oozz randomly from a set based on input from user
 fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     let mut rng = rand::thread_rng();
     let mut out = Vec::new();
