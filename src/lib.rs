@@ -60,14 +60,17 @@ fn read_file(f: &str) -> Result<String, Box<Error>> {
 
 fn parse_oozz(input: &str) -> Vec<Vec<String>> {
     let mut out: Vec<Vec<String>> = Vec::new();
-    // let mut raw: Vec<&str> = input.lines().collect();
     let mut padded: Vec<String> = Vec::new();
-    let re = Regex::new(r"\x1b[^m]*m").unwrap();
+    let all_escape_re = Regex::new(r"\x1b[^m]*m").unwrap();
+    let cursor_forward_re = Regex::new(r"(\x1b\[)([0-9]+)(C)").unwrap();
     for line in input.lines() {
-        let trimmed = re.replace_all(line, "");
+        let trimmed = all_escape_re.replace_all(line, "");
+        let mut captured_padding = 0;
+        for cap in cursor_forward_re.captures_iter(line) {
+            captured_padding = captured_padding + &cap[2].parse::<usize>().expect("Failed to parse cursor_forward_re capture");
+        }
         let count = trimmed.chars().count();
-        let pad_count = 18 - count;
-        println!("{}", pad_count);
+        let pad_count = 18 - count - captured_padding;
         let pad: String = (0..pad_count).map(|_| " ").collect();
         padded.push(String::from(line) + &pad[..]);
     }
