@@ -66,14 +66,9 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
     for line in input.lines() {
         let trimmed = re.replace_all(line, "");
         let count = trimmed.chars().count();
-        let pad_count = {
-            if count < 18 {
-                18 - count
-            } else {
-                0
-            }
-        };
-        let pad: String = (1..pad_count).map(|_| " ").collect();
+        let pad_count = 18 - count;
+        println!("{}", pad_count);
+        let pad: String = (0..pad_count).map(|_| " ").collect();
         padded.push(String::from(line) + &pad[..]);
     }
     while !padded.is_empty() {
@@ -133,6 +128,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         let mut line = String::new();
         if n == 0 {
            line = line + oozz_start;
+        } else {
+            line = line + "  ";
         }
         for input_char in input.chars().enumerate() {
             let (i, _) = input_char;
@@ -141,6 +138,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         }
         if n == 0 {
             line = line + oozz_stop;
+        } else {
+            line = line + "  ";
         }
         output.push(line);
     }
