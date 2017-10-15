@@ -41,7 +41,7 @@ impl Config {
 }
 
 /// Function to parse character font, and extra characters. Split up input files
-/// into hashmap and use char it represents as a key
+/// into hash map and use char it represents as a key
 fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>> {
 
     let mut map = HashMap::new();
@@ -111,7 +111,7 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
         let count = trimmed.chars().count();
 
         // calculate padding based on a constant visible width (CHAR_WIDTH)
-        // substracting the count from above and the captured_padding from escape sequences
+        // subtracting the count from above and the captured_padding from escape sequences
         let pad_count = CHAR_WIDTH - count - captured_padding;
 
         // construct a padded string that is prepended to the line from unprocessed input
