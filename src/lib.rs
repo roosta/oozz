@@ -45,19 +45,10 @@ impl Config {
 /// Function to parse character font, and extra characters. Split up input files
 /// into hash map and use char it represents as a key
 fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>> {
-
     let mut map = HashMap::new();
-
-    for character in letters.chars().enumerate() {
-        let (i, c) = character;
-        let first = i * LETTER_HEIGHT;
-        let last = first + LETTER_HEIGHT;
-        let mut result = Vec::new();
-        for n in first..last {
-            let line = input.lines().nth(n).expect("Failed to retrieve line");
-            result.push(line)
-        }
-        map.insert(c, result);
+    let mut lines: Vec<&str> = input.lines().collect();
+    for c in letters.chars() {
+        map.insert(c, lines.drain(..LETTER_HEIGHT).collect());
     }
     return map;
 }
