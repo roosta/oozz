@@ -2,8 +2,6 @@ extern crate rand;
 extern crate regex;
 
 use regex::Regex;
-use std::fs::File;
-use std::io::prelude::*;
 use std::error::Error;
 use std::collections::HashMap;
 use rand::Rng;
@@ -14,6 +12,10 @@ const OOZZ_HEIGHT: usize = 22;
 
 // Available letters in font
 const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.! ";
+
+const CHARS: &'static str = include_str!("../resources/chars.latin1");
+const EXTRA: &'static str = include_str!("../resources/extra.latin1");
+const OOZZ: &'static str = include_str!("../resources/oozz.latin1");
 
 // Start and end stop symbols
 const SYMBOLS: &str = "[]";
@@ -58,16 +60,6 @@ fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>
         map.insert(c, result);
     }
     return map;
-}
-
-/// Read a latin1 file and produce content as a string
-fn read_file(f: &str) -> Result<String, Box<Error>> {
-
-    let mut file = File::open(format!("resources/{}.latin1", f))?;
-    let mut string = String::new();
-    file.read_to_string(&mut string)?;
-
-    Ok(string)
 }
 
 /// Parses the oozz character font.
@@ -139,13 +131,9 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
 
 pub fn run(config: Config) -> Result<(), Box<Error>> {
 
-    let chars = read_file("chars")?;
-    let extra = read_file("extra")?;
-    let oozz = read_file("oozz")?;
-
-    let chars = parse_string(&chars[..], LETTERS);
-    let extra = parse_string(&extra[..], SYMBOLS);
-    let oozz = parse_oozz(&oozz[..]);
+    let chars = parse_string(CHARS, LETTERS);
+    let extra = parse_string(EXTRA, SYMBOLS);
+    let oozz = parse_oozz(OOZZ);
 
     let oozz_stop = "─┘";
     let oozz_start = "└─";
@@ -156,8 +144,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let input = &config.input;
 
     let oozz = choose_oozz(&input, &oozz);
-
-    // println!("{:#?}", oozz);
 
     let mut output = Vec::new();
 
