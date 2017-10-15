@@ -1,5 +1,5 @@
 #+TITLE: OOZZ
-[[file:resources/img/oozz.jpg][file:~/src/oozz/resources/img/oozz.jpg]]
+[[file:resources/img/oozz.jpg]]
 * Overview
   ANSI font rendering written in rust.
   Currently takes no opts, and only prints using green as a color.
