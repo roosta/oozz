@@ -171,13 +171,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
         println!("{}", out);
     }
 
-
-//     fn titlecase_word(word: &str) -> String {
-//         word.chars().enumerate()
-//             .map(|(i, c)| if i == 0 { c.to_uppercase() } else { c.to_lowercase() })
-//             .collect()
-// }
-
     Ok(())
 }
 
