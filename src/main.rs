@@ -14,7 +14,8 @@ fn main() {
              .long("color")
              .value_name("color")
              .takes_value(true)
-             .help("color for oozz, can be one of seven predefined: black, red, green, yellow, blue, magenta, cyan, white."))
+             .possible_values(&["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"])
+             .help("Oozz color"))
         .arg(Arg::with_name("INPUT")
              .help(&format!("Input string to render, accepted chars are currently: {}",
                             oozz::LETTERS)[..])
