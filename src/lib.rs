@@ -37,9 +37,19 @@ pub fn valid_chars(v: String) -> Result<(), String> {
 
 /// Function to parse character font, and extra characters. Split up input files
 /// into hash map and use char it represents as a key
-fn parse_string<'a>(input: &'a str, letters: &str) -> HashMap<char, Vec<&'a str>> {
+fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<String>> {
     let mut map = HashMap::new();
-    let mut lines: Vec<&str> = input.lines().collect();
+    let mut lines: Vec<String> = {
+        if color == 32 {
+            input.lines().map(|l| String::from(l)).collect()
+        } else {
+            let green_re = Regex::new(r"32m").unwrap();
+            input.lines()
+                .map(|l| green_re.replace_all(l, &format!("{}m", color)[..]).into_owned())
+                .collect()
+        }
+    };
+
     for c in letters.chars() {
         map.insert(c, lines.drain(..LETTER_HEIGHT).collect());
     }
@@ -113,20 +123,20 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     out
 }
 
-fn produce_chars(input: &str) -> Result<Vec<String>, Box<Error>> {
-    let chars = parse_string(CHARS, LETTERS);
-    let extra = parse_string(EXTRA, SYMBOLS);
+fn produce_chars(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
+    let chars = parse_string(CHARS, LETTERS, color);
+    let extra = parse_string(EXTRA, SYMBOLS, color);
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
     let chars_stop = extra.get(&']').ok_or("Couldn't retrive end character from extra")?;
 
     let mut out = Vec::new();
     for n in 0..LETTER_HEIGHT {
-        let mut line = String::from(chars_start[n]);
+        let mut line = chars_start[n].clone();
         for input_char in input.chars() {
             let output_char = chars.get(&input_char).ok_or("Failed to retrieve character from chars")?;
-            line = line + output_char[n];
+            line = line + &output_char[n][..];
         }
-        line = line + chars_stop[n];
+        line = line + &chars_stop[n][..];
         out.push(line)
     }
     Ok(out)
@@ -162,12 +172,27 @@ fn produce_oozz(input: &str) -> Result<Vec<String>, Box<Error>> {
     Ok(out)
 }
 
+fn get_color_id(color: &str) -> Result<u8, String> {
+    match color {
+        "black" => Ok(30),
+        "red" => Ok(31),
+        "green" => Ok(32),
+        "yellow" => Ok(33),
+        "blue" => Ok(34),
+        "magenta" => Ok(35),
+        "cyan" => Ok(36),
+        "white" => Ok(37),
+        &_ => Err(format!("unable to match provided color: {}", &color))
+    }
+}
+
 pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
 
     let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
+    let color = get_color_id(matches.value_of("color").unwrap_or("green"))?;
     let input = values.join(" ");
 
-    for c in produce_chars(&input)? {
+    for c in produce_chars(&input, color)? {
         println!("{}", c);
     }
 
