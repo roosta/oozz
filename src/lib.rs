@@ -113,7 +113,7 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     out
 }
 
-fn produce_chars (input: &str) -> Result<Vec<String>, Box<Error>> {
+fn produce_chars(input: &str) -> Result<Vec<String>, Box<Error>> {
     let chars = parse_string(CHARS, LETTERS);
     let extra = parse_string(EXTRA, SYMBOLS);
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
@@ -131,23 +131,19 @@ fn produce_chars (input: &str) -> Result<Vec<String>, Box<Error>> {
     }
     Ok(out)
 }
-pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
 
+fn produce_oozz(input: &str) -> Result<Vec<String>, Box<Error>> {
     let oozz = parse_oozz(OOZZ);
-
     let oozz_stop = "─┘";
     let oozz_start = "└─";
-
-    let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
-    let input = values.join(" ");
     let oozz = choose_oozz(&input, &oozz);
 
-    let mut output = produce_chars(&input)?;
+    let mut out = Vec::new();
 
     for n in 0..OOZZ_HEIGHT {
         let mut line = String::new();
         if n == 0 {
-           line = line + oozz_start;
+            line = line + oozz_start;
         } else {
             line = line + "  ";
         }
@@ -161,11 +157,22 @@ pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
         } else {
             line = line + "  ";
         }
-        output.push(line);
+        out.push(line);
+    }
+    Ok(out)
+}
+
+pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
+
+    let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
+    let input = values.join(" ");
+
+    for c in produce_chars(&input)? {
+        println!("{}", c);
     }
 
-    for out in output {
-        println!("{}", out);
+    for o in produce_oozz(&input)? {
+        println!("{}", o);
     }
 
     Ok(())
