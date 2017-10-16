@@ -1,17 +1,19 @@
 extern crate rand;
 extern crate regex;
+extern crate clap;
 
 use regex::Regex;
 use std::error::Error;
 use std::collections::HashMap;
 use rand::Rng;
+use clap::{Arg, App};
 
 // Define letter and oozz height
 const LETTER_HEIGHT: usize = 17;
 const OOZZ_HEIGHT: usize = 22;
 
 // Available letters in font
-const LETTERS: &str = "abcdefghijklmnopqrstuvwxyz.! ";
+pub const LETTERS: &'static str = "abcdefghijklmnopqrstuvwxyz.! ";
 
 const CHARS: &'static str = include_str!("../resources/chars.latin1");
 const EXTRA: &'static str = include_str!("../resources/extra.latin1");
@@ -23,24 +25,8 @@ const SYMBOLS: &str = "[]";
 // Visible character width. A character actually has an arbitrary width when
 // including escape sequences, but this is the visible width
 const CHAR_WIDTH: usize = 18;
+
 // const INIT: &str = "[0;1;40;32m";
-
-pub struct Config {
-    pub input: String,
-}
-
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 2 {
-            return Err("not enough arguments");
-        }
-
-        // let input = args.clone()[1..].join(" ");
-        let input = args[1..].join(" ");
-
-        Ok(Config { input })
-    }
-}
 
 /// Function to parse character font, and extra characters. Split up input files
 /// into hash map and use char it represents as a key
@@ -120,7 +106,7 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     out
 }
 
-pub fn run(config: Config) -> Result<(), Box<Error>> {
+pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
 
     let chars = parse_string(CHARS, LETTERS);
     let extra = parse_string(EXTRA, SYMBOLS);
@@ -132,8 +118,9 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
     let chars_stop = extra.get(&']').ok_or("Couldn't retrive end character from extra")?;
 
-    let input = &config.input;
 
+    let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
+    let input = values.join(" ");
     let oozz = choose_oozz(&input, &oozz);
 
     let mut output = Vec::new();
