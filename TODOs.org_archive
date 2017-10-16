@@ -12,3 +12,20 @@ Archived entries from file /home/roosta/src/oozz/TODOs.org
   :ARCHIVE_CATEGORY: TODOs
   :ARCHIVE_TODO: DONE
   :END:
+
+* TODO Store all font stuff in enum
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-16 Mon 20:29
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* DONE Validate input
+  CLOSED: [2017-10-16 Mon 20:32]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-16 Mon 20:32
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: DONE
+  :END:
