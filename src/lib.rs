@@ -113,25 +113,13 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     out
 }
 
-pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
-
+fn produce_chars (input: &str) -> Result<Vec<String>, Box<Error>> {
     let chars = parse_string(CHARS, LETTERS);
     let extra = parse_string(EXTRA, SYMBOLS);
-    let oozz = parse_oozz(OOZZ);
-
-    let oozz_stop = "─┘";
-    let oozz_start = "└─";
-
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
     let chars_stop = extra.get(&']').ok_or("Couldn't retrive end character from extra")?;
 
-
-    let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
-    let input = values.join(" ");
-    let oozz = choose_oozz(&input, &oozz);
-
-    let mut output = Vec::new();
-
+    let mut out = Vec::new();
     for n in 0..LETTER_HEIGHT {
         let mut line = String::from(chars_start[n]);
         for input_char in input.chars() {
@@ -139,8 +127,23 @@ pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
             line = line + output_char[n];
         }
         line = line + chars_stop[n];
-        output.push(line)
+        out.push(line)
     }
+    Ok(out)
+}
+pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
+
+    let oozz = parse_oozz(OOZZ);
+
+    let oozz_stop = "─┘";
+    let oozz_start = "└─";
+
+    let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
+    let input = values.join(" ");
+    let oozz = choose_oozz(&input, &oozz);
+
+    let mut output = produce_chars(&input)?;
+
     for n in 0..OOZZ_HEIGHT {
         let mut line = String::new();
         if n == 0 {
