@@ -6,7 +6,6 @@ use regex::Regex;
 use std::error::Error;
 use std::collections::HashMap;
 use rand::Rng;
-use clap::{Arg, App};
 
 // Define letter and oozz height
 const LETTER_HEIGHT: usize = 17;
@@ -27,6 +26,14 @@ const SYMBOLS: &str = "[]";
 const CHAR_WIDTH: usize = 18;
 
 // const INIT: &str = "[0;1;40;32m";
+
+pub fn valid_chars(v: String) -> Result<(), String> {
+    let re = Regex::new(r"[^a-zA-Z\s!]").unwrap();
+    match re.captures(&v[..]) {
+        None => return Ok(()),
+        Some(cap) => Err(format!("Unsupported character: {}", &cap[0]))
+    }
+}
 
 /// Function to parse character font, and extra characters. Split up input files
 /// into hash map and use char it represents as a key

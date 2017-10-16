@@ -20,6 +20,7 @@ fn main() {
              .help(&format!("Input string to render, accepted chars are currently: {}",
                             oozz::LETTERS)[..])
              .required(true)
+             .validator(oozz::valid_chars)
              .multiple(true))
         .get_matches();
 
