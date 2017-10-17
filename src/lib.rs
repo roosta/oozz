@@ -35,6 +35,16 @@ pub fn valid_chars(v: String) -> Result<(), String> {
     }
 }
 
+
+fn colorize (line: &str, color: u8) -> String {
+    let green_re = Regex::new(r"32m").unwrap();
+    if color == 32 {
+        String::from(line)
+    } else {
+        green_re.replace_all(line, &format!("{}m", color)[..]).into_owned()
+    }
+}
+
 /// Function to parse character font, and extra characters. Split up input files
 /// into hash map and use char it represents as a key
 fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<String>> {
@@ -43,9 +53,8 @@ fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<Stri
         if color == 32 {
             input.lines().map(|l| String::from(l)).collect()
         } else {
-            let green_re = Regex::new(r"32m").unwrap();
             input.lines()
-                .map(|l| green_re.replace_all(l, &format!("{}m", color)[..]).into_owned())
+                .map(|l| colorize(l, color))
                 .collect()
         }
     };
@@ -83,7 +92,6 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
     // and one that captures cursor_forward escapes.
     let all_escape_re = Regex::new(r"\x1b[^m]*m").unwrap();
     let cursor_forward_re = Regex::new(r"(\x1b\[)([0-9]+)(C)").unwrap();
-    let green_re = Regex::new(r"32m").unwrap();
 
     for line in input.lines() {
 
@@ -103,14 +111,7 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
 
         // construct a padded string that is prepended to the line from unprocessed input
         let pad: String = (0..pad_count).map(|_| " ").collect();
-        let colorized: String = {
-            if color == 32 {
-                String::from(line)
-            } else {
-                green_re.replace_all(line, &format!("{}m", color)[..]).into_owned()
-            }
-        };
-        padded.push(colorized + &pad[..]);
+        padded.push(colorize(line, color) + &pad[..]);
     }
 
     // finally split into characters and return
