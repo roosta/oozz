@@ -25,7 +25,7 @@ const SYMBOLS: &str = "[]";
 // including escape sequences, but this is the visible width
 const CHAR_WIDTH: usize = 18;
 
-// const INIT: &str = "[0;1;40;32m";
+const PRELUDE: &str = "[0;1;40;32m";
 
 pub fn valid_chars(v: String) -> Result<(), String> {
     let re = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
@@ -43,6 +43,11 @@ fn colorize (line: &str, color: u8) -> String {
     } else {
         green_re.replace_all(line, &format!("{}m", color)[..]).into_owned()
     }
+}
+
+fn trim_prelude (line: &str) -> String {
+    let green_re = Regex::new(r"\x1b\[0;1;40;32m").unwrap();
+    green_re.replace(line, "").into_owned()
 }
 
 /// Function to parse character font, and extra characters. Split up input files
