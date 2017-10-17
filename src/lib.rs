@@ -28,7 +28,7 @@ const CHAR_WIDTH: usize = 18;
 // const INIT: &str = "[0;1;40;32m";
 
 pub fn valid_chars(v: String) -> Result<(), String> {
-    let re = Regex::new(r"[^a-zA-Z\s!]").unwrap();
+    let re = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
     match re.captures(&v[..]) {
         None => return Ok(()),
         Some(cap) => Err(format!("Unsupported character: {}", &cap[0]))
