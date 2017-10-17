@@ -183,15 +183,15 @@ fn produce_oozz(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
 
 fn get_color_id(color: &str) -> Result<u8, String> {
     match color {
-        "black" => Ok(30),
-        "red" => Ok(31),
-        "green" => Ok(32),
-        "yellow" => Ok(33),
-        "blue" => Ok(34),
+        "black"   => Ok(30),
+        "red"     => Ok(31),
+        "green"   => Ok(32),
+        "yellow"  => Ok(33),
+        "blue"    => Ok(34),
         "magenta" => Ok(35),
-        "cyan" => Ok(36),
-        "white" => Ok(37),
-        &_ => Err(format!("unable to match provided color: {}", &color))
+        "cyan"    => Ok(36),
+        "white"   => Ok(37),
+        &_        => Err(format!("unable to match provided color: {}", &color))
     }
 }
 
