@@ -25,7 +25,7 @@ const SYMBOLS: &str = "[]";
 // including escape sequences, but this is the visible width
 const CHAR_WIDTH: usize = 18;
 
-const PRELUDE: &str = "[0;1;40;32m";
+// const PRELUDE: &str = "[0;1;40;32m";
 
 pub fn valid_chars(v: String) -> Result<(), String> {
     let re = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
@@ -98,7 +98,9 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
     let all_escape_re = Regex::new(r"\x1b[^m]*m").unwrap();
     let cursor_forward_re = Regex::new(r"(\x1b\[)([0-9]+)(C)").unwrap();
 
-    for line in input.lines() {
+    for l in input.lines().enumerate() {
+
+        let (index, line) = l;
 
         // capture all cursor forward padding in input string
         let mut captured_padding = 0;
@@ -116,7 +118,13 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
 
         // construct a padded string that is prepended to the line from unprocessed input
         let pad: String = (0..pad_count).map(|_| " ").collect();
-        padded.push(colorize(line, color) + &pad[..]);
+
+        // colorize and remove extra prelude escapes,
+        let mut prepared = colorize(line, color);
+        if index == 0 {
+            prepared = trim_prelude(&prepared);
+        }
+        padded.push(prepared + &pad[..]);
     }
 
     // finally split into characters and return
