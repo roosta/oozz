@@ -1,6 +1,7 @@
 extern crate rand;
 extern crate regex;
 extern crate clap;
+#[macro_use] extern crate lazy_static;
 
 use regex::Regex;
 use std::error::Error;
@@ -28,8 +29,10 @@ const CHAR_WIDTH: usize = 18;
 // const PRELUDE: &str = "[0;1;40;32m";
 
 pub fn valid_chars(v: String) -> Result<(), String> {
-    let re = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
-    match re.captures(&v[..]) {
+    lazy_static! {
+        static ref VALID_RE: Regex = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
+    }
+    match VALID_RE.captures(&v[..]) {
         None => return Ok(()),
         Some(cap) => Err(format!("Unsupported character: {}", &cap[0]))
     }
@@ -37,17 +40,21 @@ pub fn valid_chars(v: String) -> Result<(), String> {
 
 
 fn colorize (line: &str, color: u8) -> String {
-    let green_re = Regex::new(r"32m").unwrap();
+    lazy_static! {
+        static ref GREEN_RE: Regex = Regex::new(r"32m").unwrap();
+    }
     if color == 32 {
         String::from(line)
     } else {
-        green_re.replace_all(line, &format!("{}m", color)[..]).into_owned()
+        GREEN_RE.replace_all(line, &format!("{}m", color)[..]).into_owned()
     }
 }
 
 fn trim_prelude (line: &str) -> String {
-    let green_re = Regex::new(r"\x1b\[0;1;40;32m").unwrap();
-    green_re.replace(line, "").into_owned()
+    lazy_static! {
+        static ref PRELUDE_RE: Regex = Regex::new(r"\x1b\[0;1;40;32m").unwrap();
+    }
+    PRELUDE_RE.replace(line, "").into_owned()
 }
 
 /// Function to parse character font, and extra characters. Split up input files
