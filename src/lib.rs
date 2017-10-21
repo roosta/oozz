@@ -60,8 +60,9 @@ fn trim_prelude (line: &str) -> String {
 }
 
 /// create custom prelude based on color choice,
-fn create_prelude(color: u8) -> String {
-    format!("[0;1;{}m", color)
+fn create_prelude(color: u8, bold: bool) -> String {
+    let b = if bold { "1;" } else { "" };
+    format!("[0;{}{}m", b, color)
 }
 
 /// Function to parse character font, and extra characters. Split up input files
@@ -168,7 +169,7 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
     out
 }
 
-fn produce_chars(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
+fn produce_chars(input: &str, color: u8, bold: bool) -> Result<Vec<String>, Box<Error>> {
     let chars = parse_string(CHARS, LETTERS, color);
     let extra = parse_string(EXTRA, SYMBOLS, color);
     let chars_start = extra.get(&'[').ok_or("Couldn't retrive start character from extra")?;
@@ -180,7 +181,7 @@ fn produce_chars(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
         for input_char in input.chars().enumerate() {
             let (i, c) = input_char;
             if i == 0 && n == 0 {
-                line = [create_prelude(color), line].concat();
+                line = [create_prelude(color, bold), line].concat();
             }
             let output_char = chars.get(&c).ok_or("Failed to retrieve character from chars")?;
             line = line + &output_char[n][..];
@@ -242,7 +243,7 @@ pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
     let bold = matches.is_present("bold");
     let input = values.join(" ");
 
-    for c in produce_chars(&input, color)? {
+    for c in produce_chars(&input, color, bold)? {
         println!("{}", c);
     }
 
