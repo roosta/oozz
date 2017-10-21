@@ -63,10 +63,25 @@ fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<Stri
     let mut map = HashMap::new();
     let mut lines: Vec<String> = {
         if color == 32 {
-            input.lines().map(|l| String::from(l)).collect()
+            input.lines()
+                .enumerate()
+                .map(|(i, l)| {
+                    if i == 0 {
+                        trim_prelude(l)
+                    } else {
+                        String::from(l)
+                    }
+                }).collect()
         } else {
             input.lines()
-                .map(|l| colorize(l, color))
+                .enumerate()
+                .map(|(i, l)| {
+                    if i == 0 {
+                        colorize(&trim_prelude(l), color)
+                    } else {
+                        colorize(l, color)
+                    }
+                })
                 .collect()
         }
     };
@@ -127,9 +142,11 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
         let pad: String = (0..pad_count).map(|_| " ").collect();
 
         // colorize and remove extra prelude escapes,
-        let mut prepared = colorize(line, color);
+        let prepared: String;
         if index == 0 {
-            prepared = trim_prelude(&prepared);
+            prepared = colorize(&trim_prelude(line), color);
+        } else {
+            prepared = colorize(line, color);
         }
         padded.push(prepared + &pad[..]);
     }
