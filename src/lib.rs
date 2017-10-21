@@ -125,7 +125,7 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
 
     // Create a regexp that captures all escape sequences in input
     // and one that captures cursor_forward escapes.
-    let all_escape_re = Regex::new(r"\x1b[^m]*m").unwrap();
+    let all_escape_re = Regex::new(r"(\x1b[^m]*m|\x1b\[\d+C)").unwrap();
     let cursor_forward_re = Regex::new(r"(\x1b\[)([0-9]+)(C)").unwrap();
 
     for l in input.lines().enumerate() {
