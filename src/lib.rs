@@ -26,7 +26,7 @@ const SYMBOLS: &str = "[]";
 // including escape sequences, but this is the visible width
 const CHAR_WIDTH: usize = 18;
 
-// const PRELUDE: &str = "[0;1;40;32m";
+const PRELUDE: &'static str = "[0;1;40;32m";
 
 pub fn valid_chars(v: String) -> Result<(), String> {
     lazy_static! {
@@ -50,6 +50,10 @@ fn colorize (line: &str, color: u8) -> String {
     }
 }
 
+/// At the start of each input file, there is appended a prelude of sorts, that
+/// sets various properties for the following content. This prelude is
+/// reoccurring and we only really need one so its trimmed away from all input
+/// and added later
 fn trim_prelude (line: &str) -> String {
     lazy_static! {
         static ref PRELUDE_RE: Regex = Regex::new(r"\x1b\[0;1;40;32m").unwrap();
@@ -61,6 +65,7 @@ fn trim_prelude (line: &str) -> String {
 /// into hash map and use char it represents as a key
 fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<String>> {
     let mut map = HashMap::new();
+
     let mut lines: Vec<String> = {
         if color == 32 {
             input.lines()
