@@ -26,8 +26,6 @@ const SYMBOLS: &str = "[]";
 // including escape sequences, but this is the visible width
 const CHAR_WIDTH: usize = 18;
 
-const PRELUDE: &'static str = "[0;1;40;32m";
-
 pub fn valid_chars(v: String) -> Result<(), String> {
     lazy_static! {
         static ref VALID_RE: Regex = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
@@ -59,6 +57,10 @@ fn trim_prelude (line: &str) -> String {
         static ref PRELUDE_RE: Regex = Regex::new(r"\x1b\[0;1;40;32m").unwrap();
     }
     PRELUDE_RE.replace(line, "").into_owned()
+}
+
+fn create_prelude(color: u8) -> String {
+    format!("[0;1;40;{}m", color)
 }
 
 /// Function to parse character font, and extra characters. Split up input files
@@ -183,8 +185,12 @@ fn produce_chars(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
     let mut out = Vec::new();
     for n in 0..LETTER_HEIGHT {
         let mut line = chars_start[n].clone();
-        for input_char in input.chars() {
-            let output_char = chars.get(&input_char).ok_or("Failed to retrieve character from chars")?;
+        for input_char in input.chars().enumerate() {
+            let (i, c) = input_char;
+            if i == 0 && n == 0 {
+                line = [create_prelude(color), line].concat();
+            }
+            let output_char = chars.get(&c).ok_or("Failed to retrieve character from chars")?;
             line = line + &output_char[n][..];
         }
         line = line + &chars_stop[n][..];
