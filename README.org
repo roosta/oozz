@@ -1,18 +1,21 @@
 [[file:resources/img/oozz.jpg]]
 * Overview
-  ANSI font rendering written in rust.
-  Currently takes no opts, and only prints using green as a color.
-* Building
-  Requires rust and cargo installed on system.
-  #+BEGIN_SRC shell
-  cargo build
-  #+END_SRC
-
+  A program that takes input and renders it in an ANSI art font, and adds some
+  oozz.
 * Usage
-  To use simple call
+  Basic usage would be simply calling oozz and the remaining input is treated as
+  a string
   #+BEGIN_SRC shell
-  cargo run <TEXT>
+  oozz some text
   #+END_SRC
-  or use the compiled binary
 
-  Only supports these characters currently: abcdefghijklmnopqrstuvwxyz.!
+  Supported characters are: ~abcdefghijklmnopqrstuvwxyz. !~ This somewhat limited
+  at the moment, but I plan to add more.
+* Options
+  Aside from the green color used by default you can use any of the 16 colors supported by your terminal, with a combination of
+  the color option ~--color black|red|green|yellow|blue|magenta|cyan|white~ and the ~--bold~ flag.
+* Building
+  Requires [[https://www.rust-lang.org/en-US/][Rust]], [[http://doc.crates.io/][Cargo]] and [[https://github.com/pinard/Recode][Recode]] installed on system.
+  #+BEGIN_SRC shell
+    make && cargo build
+  #+END_SRC

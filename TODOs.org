@@ -1,2 +1,2 @@
-* TODO Trim inital escape codes from letters
 * TODO Ensure no two alike adjacent
+* TODO Support piping
