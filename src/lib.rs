@@ -59,8 +59,9 @@ fn trim_prelude (line: &str) -> String {
     PRELUDE_RE.replace(line, "").into_owned()
 }
 
+/// create custom prelude based on color choice,
 fn create_prelude(color: u8) -> String {
-    format!("[0;1;40;{}m", color)
+    format!("[0;1;{}m", color)
 }
 
 /// Function to parse character font, and extra characters. Split up input files
