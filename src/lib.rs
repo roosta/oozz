@@ -119,7 +119,7 @@ fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<Stri
 ///
 /// Just wanted to add all this here so maybe this code makes sense down the
 /// road.
-fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
+fn parse_oozz(input: &str) -> Vec<Vec<String>> {
     let mut out: Vec<Vec<String>> = Vec::new();
     let mut padded: Vec<String> = Vec::new();
 
@@ -128,9 +128,7 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
     let all_escape_re = Regex::new(r"(\x1b[^m]*m|\x1b\[\d+C)").unwrap();
     let cursor_forward_re = Regex::new(r"(\x1b\[)([0-9]+)(C)").unwrap();
 
-    for l in input.lines().enumerate() {
-
-        let (index, line) = l;
+    for line in input.lines() {
 
         // capture all cursor forward padding in input string
         let mut captured_padding = 0;
@@ -149,14 +147,7 @@ fn parse_oozz(input: &str, color: u8) -> Vec<Vec<String>> {
         // construct a padded string that is prepended to the line from unprocessed input
         let pad: String = (0..pad_count).map(|_| " ").collect();
 
-        // colorize and remove extra prelude escapes,
-        let prepared: String;
-        if index == 0 {
-            prepared = colorize(&trim_prelude(line), color);
-        } else {
-            prepared = colorize(line, color);
-        }
-        padded.push(prepared + &pad[..]);
+        padded.push(String::from(line) + &pad[..]);
     }
 
     // finally split into characters and return
@@ -200,8 +191,8 @@ fn produce_chars(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
     Ok(out)
 }
 
-fn produce_oozz(input: &str, color: u8) -> Result<Vec<String>, Box<Error>> {
-    let oozz = parse_oozz(OOZZ, color);
+fn produce_oozz(input: &str) -> Result<Vec<String>, Box<Error>> {
+    let oozz = parse_oozz(OOZZ);
     let oozz_stop = "─┘";
     let oozz_start = "└─";
     let oozz = choose_oozz(&input, &oozz);
@@ -248,13 +239,14 @@ pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
 
     let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
     let color = get_color_id(matches.value_of("color").unwrap_or("green"))?;
+    let bold = matches.is_present("bold");
     let input = values.join(" ");
 
     for c in produce_chars(&input, color)? {
         println!("{}", c);
     }
 
-    for o in produce_oozz(&input, color)? {
+    for o in produce_oozz(&input)? {
         println!("{}", o);
     }
 
