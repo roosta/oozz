@@ -12,7 +12,7 @@ fn main() {
         .arg(Arg::with_name("bold")
              .short("b")
              .long("bold")
-             .help("Whether to use bold colors or not"))
+             .help("Use bold colors"))
         .arg(Arg::with_name("color")
              .short("c")
              .long("color")
