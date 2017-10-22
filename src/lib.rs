@@ -255,37 +255,67 @@ pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
 }
 
 
-// #[cfg(test)]
-// mod test {
-//     use super::*;
+#[cfg(test)]
+mod test {
 
-//     #[test]
-//     fn case_sensitive() {
-//         let query = "duct";
-//         let contents = "\
-//         Rust:
-// safe, fast, productive.
-// Pick three.
-// Duct tape.";
+    #[test]
+    fn valid_chars() {
+        assert_eq!(
+            Ok(()),
+            super::valid_chars(String::from(super::LETTERS))
+        );
+    }
 
-//         assert_eq!(
-//             vec!["safe, fast, productive."],
-//             search(query, contents)
-//         );
-//     }
+    #[test]
+    fn colorize() {
+        let input = "[37m [32m [37m [32m";
+        let red: u8 = 31;
+        assert_eq!(
+            "[37m [31m [37m [31m",
+            super::colorize(&input, red)
+        );
+    }
 
-//     #[test]
-//     fn case_insensitive() {
-//         let query = "rUsT";
-//         let contents = "\
-//         Rust:
-// safe, fast, productive.
-// Pick three.
-// Trust me.";
+    #[test]
+    fn trim_prelude() {
+        let input = "[0;1;40;32m──────────────────";
+        assert_eq!(
+            "──────────────────",
+            super::trim_prelude(&input)
+        )
+    }
 
-//         assert_eq!(
-//             vec!["Rust:", "Trust me."],
-//             search_case_insensitive(query, contents)
-//         );
-//     }
-// }
+    #[test]
+    fn create_prelude() {
+        assert_eq!(
+            "[0;1;31m",
+            super::create_prelude(31, true)
+        )
+    }
+
+    #[test]
+    fn parse_string() {
+        let chars = super::parse_string(super::CHARS, super::LETTERS, 33);
+        let test_char = chars.get(&'c').unwrap();
+        let expected = vec![
+            String::from("──────────────────"),
+            String::from("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒"),
+            String::from("▒▒▒[37m┌────────────┐[33m░"),
+            String::from("▒▒▒[37m│▓▒▒▒▒▒▒▒▒▒▒▒│[33m░"),
+            String::from("▒[37m┌─┘▓▒▒▒▒▒▒▒▒┌──┘[33m░"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒┌──┘[33m░▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒│[33m░▒▒▒▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒│[33m░▒▒▒▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒│[33m░▒▒▒▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒│[33m░▒▒▒▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒│[33m░▒▒▒▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒│[33m░▒▒▒▒▒▒"),
+            String::from("▒[37m│▓▒▒▒▒▒▒▒└──┐[33m░▒▒▒"),
+            String::from("▒[37m└──┐▓▒▒▒▒▒▒▒└──┐[33m░"),
+            String::from("▒▒▒▒[37m│▓▒▒▒▒▒▒▒▒▒▒│[33m░"),
+            String::from("▒▒▒▒[37m└───────────┘[33m░"),
+            String::from("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒")
+        ];
+        assert_eq!(test_char, &expected)
+    }
+}
