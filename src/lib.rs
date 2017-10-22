@@ -318,6 +318,7 @@ mod test {
         ];
         assert_eq!(test_char, &expected)
     }
+
     #[test]
     fn parse_oozz() {
         let oozz = super::parse_oozz(super::OOZZ);
@@ -347,5 +348,34 @@ mod test {
             String::from("                  ")
         ];
         assert_eq!(target, &expected)
+    }
+    #[test]
+    fn choose_oozz() {
+        let input = "a";
+        let oozz = vec![vec![
+            String::from("──┐▓▒▒▒▒▒▒▒┌──────"),
+            String::from("  │▓▒▒▒▒▒▒▒│      "),
+            String::from("  │▓▒▒▒▒▒▒▒│      "),
+            String::from("  │┌────┐▓▒│      "),
+            String::from("  ││┌──┐│▓▒│      "),
+            String::from("  └┘│▓▒││▓▒│      "),
+            String::from("    └──┘│▓▒│      "),
+            String::from("    ┌──┐│▓▒│      "),
+            String::from("    │▓▒││▓▒│      "),
+            String::from("    ├──┘└─┐│      "),
+            String::from("    │▓▒   ││      "),
+            String::from("[10C││      "),
+            String::from("    │[5C││      "),
+            String::from("[10C└┘      "),
+            String::from("    │             "),
+            String::from("                  "),
+            String::from("[5C▓▒           "),
+            String::from("                  "),
+            String::from("                  "),
+            String::from("                  "),
+            String::from("                  "),
+            String::from("                  ")
+        ]];
+        assert_eq!(super::choose_oozz(&input, &oozz).expect("Failed to get result from choose_oozz"), oozz);
     }
 }
