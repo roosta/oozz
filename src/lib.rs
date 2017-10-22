@@ -6,7 +6,7 @@ extern crate clap;
 use regex::Regex;
 use std::error::Error;
 use std::collections::HashMap;
-use rand::Rng;
+use rand::{Rng, SeedableRng, StdRng};
 
 // Define letter and oozz height
 const LETTER_HEIGHT: usize = 17;
@@ -26,25 +26,23 @@ const SYMBOLS: &str = "[]";
 // including escape sequences, but this is the visible width
 const CHAR_WIDTH: usize = 18;
 
+/// validate input characters, ensure they are part of the allowed set
 pub fn valid_chars(v: String) -> Result<(), String> {
     lazy_static! {
         static ref VALID_RE: Regex = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
     }
     match VALID_RE.captures(&v[..]) {
-        None => return Ok(()),
+        None => Ok(()),
         Some(cap) => Err(format!("Unsupported character: {}", &cap[0]))
     }
 }
 
-
+/// locate green color as a regex match and replace with supplied color arg
 fn colorize (line: &str, color: u8) -> String {
-    lazy_static! {
-        static ref GREEN_RE: Regex = Regex::new(r"32m").unwrap();
-    }
     if color == 32 {
         String::from(line)
     } else {
-        GREEN_RE.replace_all(line, &format!("{}m", color)[..]).into_owned()
+        line.replace("32m", &format!("{}m", color))
     }
 }
 
@@ -53,10 +51,7 @@ fn colorize (line: &str, color: u8) -> String {
 /// reoccurring and we only really need one so its trimmed away from all input
 /// and added later
 fn trim_prelude (line: &str) -> String {
-    lazy_static! {
-        static ref PRELUDE_RE: Regex = Regex::new(r"\x1b\[0;1;40;32m").unwrap();
-    }
-    PRELUDE_RE.replace(line, "").into_owned()
+    line.replace("\x1b[0;1;40;32m", "")
 }
 
 /// create custom prelude based on color choice,
@@ -98,7 +93,7 @@ fn parse_string(input: &str, letters: &str, color: u8) -> HashMap<char, Vec<Stri
     for c in letters.chars() {
         map.insert(c, lines.drain(..LETTER_HEIGHT).collect());
     }
-    return map;
+    map
 }
 
 /// Parses the oozz character font.
@@ -134,7 +129,7 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
         // capture all cursor forward padding in input string
         let mut captured_padding = 0;
         for cap in cursor_forward_re.captures_iter(line) {
-            captured_padding = captured_padding + &cap[2].parse::<usize>().expect("Failed to parse cursor_forward_re capture");
+            captured_padding += &cap[2].parse::<usize>().expect("Failed to parse cursor_forward_re capture");
         }
 
         // remove all escapes from input, and count chars
@@ -161,6 +156,9 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
 /// Choose some oozz randomly from a set based on input from user
 fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Result<Vec<Vec<String>>, Box<Error>> {
     let mut rng = rand::weak_rng();
+    // let seed: &[_] = &[1, 2, 3, 4];
+    // let seed: &[usize] = input;
+    // let mut rng: StdRng = SeedableRng::from_seed(seed);
     let mut out = Vec::new();
     for _ in input.chars() {
         let chosen = rng.choose(&oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
@@ -169,6 +167,8 @@ fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Result<Vec<Vec<String>>,
     Ok(out)
 }
 
+/// Produces the final char output, composed from user input string.
+/// Add start and end stops to output, so that its borders are completed
 fn produce_chars(input: &str, color: u8, bold: bool) -> Result<Vec<String>, Box<Error>> {
     let chars = parse_string(CHARS, LETTERS, color);
     let extra = parse_string(EXTRA, SYMBOLS, color);
