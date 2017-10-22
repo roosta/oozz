@@ -159,14 +159,14 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
 }
 
 /// Choose some oozz randomly from a set based on input from user
-fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Vec<Vec<String>> {
+fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Result<Vec<Vec<String>>, Box<Error>> {
     let mut rng = rand::thread_rng();
     let mut out = Vec::new();
     for _ in input.chars() {
-        let chosen = rng.choose(&oozz).expect("Failed to randomly choose an oozz character from parsed");
+        let chosen = rng.choose(&oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
         out.push(chosen.to_vec());
     }
-    out
+    Ok(out)
 }
 
 fn produce_chars(input: &str, color: u8, bold: bool) -> Result<Vec<String>, Box<Error>> {
@@ -196,7 +196,7 @@ fn produce_oozz(input: &str) -> Result<Vec<String>, Box<Error>> {
     let oozz = parse_oozz(OOZZ);
     let oozz_stop = "─┘";
     let oozz_start = "└─";
-    let oozz = choose_oozz(&input, &oozz);
+    let oozz = choose_oozz(&input, &oozz)?;
 
     let mut out = Vec::new();
 
