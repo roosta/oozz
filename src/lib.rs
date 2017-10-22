@@ -318,4 +318,34 @@ mod test {
         ];
         assert_eq!(test_char, &expected)
     }
+    #[test]
+    fn parse_oozz() {
+        let oozz = super::parse_oozz(super::OOZZ);
+        let target = oozz.get(9).unwrap();
+        let expected = vec![
+            String::from("──┐▓▒▒▒▒▒▒▒┌──────"),
+            String::from("  │▓▒▒▒▒▒▒▒│      "),
+            String::from("  │▓▒▒▒▒▒▒▒│      "),
+            String::from("  │┌────┐▓▒│      "),
+            String::from("  ││┌──┐│▓▒│      "),
+            String::from("  └┘│▓▒││▓▒│      "),
+            String::from("    └──┘│▓▒│      "),
+            String::from("    ┌──┐│▓▒│      "),
+            String::from("    │▓▒││▓▒│      "),
+            String::from("    ├──┘└─┐│      "),
+            String::from("    │▓▒   ││      "),
+            String::from("[10C││      "),
+            String::from("    │[5C││      "),
+            String::from("[10C└┘      "),
+            String::from("    │             "),
+            String::from("                  "),
+            String::from("[5C▓▒           "),
+            String::from("                  "),
+            String::from("                  "),
+            String::from("                  "),
+            String::from("                  "),
+            String::from("                  ")
+        ];
+        assert_eq!(target, &expected)
+    }
 }
