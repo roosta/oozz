@@ -1,2 +1,6 @@
 * TODO Ensure no two alike adjacent
 * TODO Support piping
+* TODO Center
+* TODO Retroactively tag commits
+* TODO Add tests
+* TODO Add on crates.io
