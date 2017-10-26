@@ -126,7 +126,11 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
         let pad_count = CHAR_WIDTH - count - captured_padding;
 
         // construct a padded string that is prepended to the line from unprocessed input
-        let pad: String = (0..pad_count).map(|_| " ").collect();
+        let pad = if pad_count > 0 {
+            format!("\x1b[{}C", pad_count)
+        } else {
+            String::from("")
+        };
 
         padded.push(String::from(line) + &pad[..]);
     }
@@ -311,27 +315,27 @@ mod test {
         let target = oozz.get(9).unwrap();
         let expected = vec![
             String::from("──┐▓▒▒▒▒▒▒▒┌──────"),
-            String::from("  │▓▒▒▒▒▒▒▒│      "),
-            String::from("  │▓▒▒▒▒▒▒▒│      "),
-            String::from("  │┌────┐▓▒│      "),
-            String::from("  ││┌──┐│▓▒│      "),
-            String::from("  └┘│▓▒││▓▒│      "),
-            String::from("    └──┘│▓▒│      "),
-            String::from("    ┌──┐│▓▒│      "),
-            String::from("    │▓▒││▓▒│      "),
-            String::from("    ├──┘└─┐│      "),
-            String::from("    │▓▒   ││      "),
-            String::from("[10C││      "),
-            String::from("    │[5C││      "),
-            String::from("[10C└┘      "),
-            String::from("    │             "),
-            String::from("                  "),
-            String::from("[5C▓▒           "),
-            String::from("                  "),
-            String::from("                  "),
-            String::from("                  "),
-            String::from("                  "),
-            String::from("                  ")
+            String::from("  │▓▒▒▒▒▒▒▒│[6C"),
+            String::from("  │▓▒▒▒▒▒▒▒│[6C"),
+            String::from("  │┌────┐▓▒│[6C"),
+            String::from("  ││┌──┐│▓▒│[6C"),
+            String::from("  └┘│▓▒││▓▒│[6C"),
+            String::from("    └──┘│▓▒│[6C"),
+            String::from("    ┌──┐│▓▒│[6C"),
+            String::from("    │▓▒││▓▒│[6C"),
+            String::from("    ├──┘└─┐│[6C"),
+            String::from("    │▓▒   ││[6C"),
+            String::from("[10C││[6C"),
+            String::from("    │[5C││[6C"),
+            String::from("[10C└┘[6C"),
+            String::from("    │[13C"),
+            String::from("[18C"),
+            String::from("[5C▓▒[11C"),
+            String::from("[18C"),
+            String::from("[18C"),
+            String::from("[18C"),
+            String::from("[18C"),
+            String::from("[18C")
         ];
         assert_eq!(target, &expected)
     }
@@ -340,29 +344,30 @@ mod test {
         let input = "a";
         let oozz = vec![vec![
             String::from("──┐▓▒▒▒▒▒▒▒┌──────"),
-            String::from("  │▓▒▒▒▒▒▒▒│      "),
-            String::from("  │▓▒▒▒▒▒▒▒│      "),
-            String::from("  │┌────┐▓▒│      "),
-            String::from("  ││┌──┐│▓▒│      "),
-            String::from("  └┘│▓▒││▓▒│      "),
-            String::from("    └──┘│▓▒│      "),
-            String::from("    ┌──┐│▓▒│      "),
-            String::from("    │▓▒││▓▒│      "),
-            String::from("    ├──┘└─┐│      "),
-            String::from("    │▓▒   ││      "),
-            String::from("[10C││      "),
-            String::from("    │[5C││      "),
-            String::from("[10C└┘      "),
-            String::from("    │             "),
-            String::from("                  "),
-            String::from("[5C▓▒           "),
-            String::from("                  "),
-            String::from("                  "),
-            String::from("                  "),
-            String::from("                  "),
-            String::from("                  ")
+            String::from("  │▓▒▒▒▒▒▒▒│[6C"),
+            String::from("  │▓▒▒▒▒▒▒▒│[6C"),
+            String::from("  │┌────┐▓▒│[6C"),
+            String::from("  ││┌──┐│▓▒│[6C"),
+            String::from("  └┘│▓▒││▓▒│[6C"),
+            String::from("    └──┘│▓▒│[6C"),
+            String::from("    ┌──┐│▓▒│[6C"),
+            String::from("    │▓▒││▓▒│[6C"),
+            String::from("    ├──┘└─┐│[6C"),
+            String::from("    │▓▒   ││[6C"),
+            String::from("[10C││[6C"),
+            String::from("    │[5C││[6C"),
+            String::from("[10C└┘[6C"),
+            String::from("    │[13C"),
+            String::from("[18C"),
+            String::from("[5C▓▒[11C"),
+            String::from("[18C"),
+            String::from("[18C"),
+            String::from("[18C"),
+            String::from("[18C"),
+            String::from("[18C")
         ]];
-        assert_eq!(super::choose_oozz(&input, &oozz).expect("Failed to get result from choose_oozz"), oozz);
+        let choosed = super::choose_oozz(&input, &oozz).expect("Failed to get result from choose_oozz");
+        assert_eq!(choosed, oozz);
     }
 
     #[test]
