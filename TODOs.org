@@ -1,6 +1,7 @@
 * TODO Ensure no two alike adjacent
 * TODO Support piping
 * TODO Center
-* TODO Retroactively tag commits
 * TODO Add tests
 * TODO Add on crates.io
+* DONE Use cursor movement instead of whitespace when padding
+  CLOSED: [2017-10-26 Thu 22:21]
