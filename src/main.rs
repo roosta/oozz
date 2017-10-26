@@ -28,7 +28,7 @@ fn main() {
              .multiple(true))
         .get_matches();
 
-    if let Err(e) = oozz::run(matches) {
+    if let Err(e) = oozz::run(&matches) {
         eprintln!("Application error: {}", e);
 
         process::exit(1);

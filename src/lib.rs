@@ -154,14 +154,14 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
 }
 
 /// Choose some oozz randomly from a set based on input from user
-fn choose_oozz(input: &str, oozz: &Vec<Vec<String>>) -> Result<Vec<Vec<String>>, Box<Error>> {
+fn choose_oozz(input: &str, oozz: &[Vec<String>]) -> Result<Vec<Vec<String>>, Box<Error>> {
     let mut rng = rand::weak_rng();
     // let seed: &[_] = &[1, 2, 3, 4];
     // let seed: &[usize] = input;
     // let mut rng: StdRng = SeedableRng::from_seed(seed);
     let mut out = Vec::new();
     for _ in input.chars() {
-        let chosen = rng.choose(&oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
+        let chosen = rng.choose(oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
         out.push(chosen.to_vec());
     }
     Ok(out)
@@ -184,9 +184,9 @@ fn produce_chars(input: &str, color: u8, bold: bool) -> Result<Vec<String>, Box<
                 line = [create_prelude(color, bold), line].concat();
             }
             let output_char = chars.get(&c).ok_or("Failed to retrieve character from chars")?;
-            line = line + &output_char[n][..];
+            line += &output_char[n][..];
         }
-        line = line + &chars_stop[n][..];
+        line += &chars_stop[n][..];
         out.push(line)
     }
     Ok(out)
@@ -196,26 +196,26 @@ fn produce_oozz(input: &str) -> Result<Vec<String>, Box<Error>> {
     let oozz = parse_oozz(OOZZ);
     let oozz_stop = "─┘";
     let oozz_start = "└─";
-    let oozz = choose_oozz(&input, &oozz)?;
+    let oozz = choose_oozz(input, &oozz)?;
 
     let mut out = Vec::new();
 
     for n in 0..OOZZ_HEIGHT {
         let mut line = String::new();
         if n == 0 {
-            line = line + oozz_start;
+            line += oozz_start;
         } else {
-            line = line + "  ";
+            line += "  ";
         }
         for input_char in input.chars().enumerate() {
             let (i, _) = input_char;
             let output_char = oozz.get(i).ok_or("Failed to retrieve character from oozz")?;
-            line = line + &output_char[n][..];
+            line += &output_char[n][..];
         }
         if n == 0 {
-            line = line + oozz_stop;
+            line += oozz_stop;
         } else {
-            line = line + "  ";
+            line += "  ";
         }
         out.push(line);
     }
@@ -236,7 +236,7 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
-pub fn run(matches: clap::ArgMatches) -> Result<(), Box<Error>> {
+pub fn run(matches: &clap::ArgMatches) -> Result<(), Box<Error>> {
 
     let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
     let color = get_color_id(matches.value_of("color").unwrap_or("green"))?;
