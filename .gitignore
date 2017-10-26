@@ -2,4 +2,3 @@
 **/*.rs.bk
 output.txt
 backup
-*.latin1
