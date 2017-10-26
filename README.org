@@ -15,7 +15,7 @@
   Aside from the green color used by default you can use any of the 16 colors supported by your terminal, with a combination of
   the color option ~--color black|red|green|yellow|blue|magenta|cyan|white~ and the ~--bold~ flag.
 * Building
-  Requires [[https://www.rust-lang.org/en-US/][Rust]], [[http://doc.crates.io/][Cargo]] and [[https://github.com/pinard/Recode][Recode]] installed on system.
+  Requires [[https://www.rust-lang.org/en-US/][Rust]] and [[http://doc.crates.io/][Cargo]] installed on system.
   #+BEGIN_SRC shell
     make && cargo build
   #+END_SRC
