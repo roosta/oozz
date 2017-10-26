@@ -6,7 +6,8 @@ extern crate clap;
 use regex::Regex;
 use std::error::Error;
 use std::collections::HashMap;
-use rand::{Rng, SeedableRng, StdRng};
+use rand::Rng;
+// use rand::{Rng, SeedableRng, StdRng};
 
 // Define letter and oozz height
 const LETTER_HEIGHT: usize = 17;
