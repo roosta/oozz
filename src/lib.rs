@@ -227,10 +227,6 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
-fn center() {
-
-}
-
 pub fn run(matches: &clap::ArgMatches) -> Result<(), Box<Error>> {
 
     let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
