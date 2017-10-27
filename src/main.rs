@@ -6,13 +6,17 @@ use clap::{Arg, App};
 
 fn main() {
     let matches = App::new("Oozz")
-        .version("0.1.0")
+        .version("0.3.0")
         .author("Daniel Berg <mail@roosta.sh>")
         .about("ANSI art font rendering")
         .arg(Arg::with_name("bold")
              .short("b")
              .long("bold")
              .help("Use bold colors"))
+        .arg(Arg::with_name("center")
+             .short("C")
+             .long("center")
+             .help("Center output to terminal width"))
         .arg(Arg::with_name("color")
              .short("c")
              .long("color")
