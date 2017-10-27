@@ -1,6 +1,8 @@
 extern crate rand;
 extern crate regex;
 extern crate clap;
+extern crate term_size;
+
 #[macro_use] extern crate lazy_static;
 
 use regex::Regex;
@@ -225,20 +227,32 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
+fn center() {
+
+}
+
 pub fn run(matches: &clap::ArgMatches) -> Result<(), Box<Error>> {
 
     let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
     let color = get_color_id(matches.value_of("color").unwrap_or("green"))?;
     let bold = matches.is_present("bold");
     let input = values.join(" ");
-
-    for c in produce_chars(&input, color, bold)? {
-        println!("{}", c);
-    }
-
-    for o in produce_oozz(&input)? {
-        println!("{}", o);
-    }
+    let chars = produce_chars(&input, color, bold)?;
+    let oozz = produce_oozz(&input)?;
+    if matches.is_present("center") {
+        let (width, _) = term_size::dimensions().ok_or("Failed to get terminal dimensions")?;
+        let out_width = CHAR_WIDTH * input.chars().count();
+        let padding = (width - out_width - 4) / 2;
+        for c in chars {
+            println!("\x1b[{}C{}", padding, c)
+        }
+        for o in oozz {
+            println!("\x1b[{}C{}", padding, o)
+        }
+    } else {
+        for c in chars {println!("{}", c);}
+        for o in oozz {println!("{}", o);}
+    };
 
     Ok(())
 }

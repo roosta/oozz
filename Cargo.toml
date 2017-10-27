@@ -1,6 +1,6 @@
 [package]
 name = "oozz"
-version = "0.2.1"
+version = "0.3.1"
 authors = ["Daniel Berg <mail@roosta.sh>"]
 
 [dependencies]
@@ -8,3 +8,4 @@ rand = "0.3.17"
 regex = "0.2"
 clap = "2.26.2"
 lazy_static = "0.2.9"
+term_size = "0.3"
