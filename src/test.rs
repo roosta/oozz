@@ -248,3 +248,8 @@ fn produce_oozz() {
         "  \u{1b}[18C\u{1b}[18C\u{1b}[18C\u{1b}[18C  "]
     )
 }
+
+#[test]
+fn get_color_id() {
+    assert!(super::get_color_id("yellow") == Ok(33) && super::get_color_id("cyan") == Ok(36))
+}
