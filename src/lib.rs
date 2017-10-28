@@ -8,8 +8,8 @@ extern crate term_size;
 use regex::Regex;
 use std::error::Error;
 use std::collections::HashMap;
-use rand::Rng;
-// use rand::{Rng, SeedableRng, StdRng};
+// use rand::Rng;
+use rand::{Rng, SeedableRng, StdRng};
 
 // Define letter and oozz height
 const LETTER_HEIGHT: usize = 17;
@@ -146,10 +146,9 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
 
 /// Choose some oozz randomly from a set based on input from user
 fn choose_oozz(input: &str, oozz: &[Vec<String>]) -> Result<Vec<Vec<String>>, Box<Error>> {
-    let mut rng = rand::weak_rng();
-    // let seed: &[_] = &[1, 2, 3, 4];
-    // let seed: &[usize] = input;
-    // let mut rng: StdRng = SeedableRng::from_seed(seed);
+    // let mut rng = rand::weak_rng();
+    let seed: Vec<usize> = input.chars().map(|c| c as usize).collect();
+    let mut rng: StdRng = SeedableRng::from_seed(&seed[..]);
     let mut out = Vec::new();
     for _ in input.chars() {
         let chosen = rng.choose(oozz).ok_or("Failed to randomly choose an oozz character from parsed")?;
