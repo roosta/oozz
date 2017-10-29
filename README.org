@@ -1,4 +1,5 @@
 [[file:resources/img/oozz.jpg]]
+[[https://travis-ci.org/roosta/oozz][https://travis-ci.org/roosta/oozz.svg?branch=master]]
 * Overview
   A CLI program that takes input and renders it in an ANSI art font, and adds
   some colored oozz.
