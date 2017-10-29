@@ -225,7 +225,7 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
-pub fn run(input: String, color: &str, bold: bool, center: bool) -> Result<(), Box<Error>> {
+pub fn run(input: &str, color: &str, bold: bool, center: bool) -> Result<(), Box<Error>> {
     let color = get_color_id(color)?;
     let chars = produce_chars(&input, color, bold)?;
     let oozz = produce_oozz(&input)?;
