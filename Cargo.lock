@@ -1,6 +1,6 @@
 [root]
 name = "oozz"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "clap 2.27.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 0.2.9 (registry+https://github.com/rust-lang/crates.io-index)",
