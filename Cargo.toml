@@ -9,6 +9,9 @@ keywords = ["ansi", "ascii", "art"]
 categories = ["command-line-utilities"]
 license = "GPL-3.0"
 
+[badges]
+travis-ci = { repository = "roosta/oozz" }
+
 [dependencies]
 rand = "0.3.17"
 regex = "0.2"
