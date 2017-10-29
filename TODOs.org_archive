@@ -46,3 +46,47 @@ Archived entries from file /home/roosta/src/oozz/TODOs.org
   :ARCHIVE_CATEGORY: TODOs
   :ARCHIVE_TODO: TODO
   :END:
+
+* TODO Add coverage
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-29 Sun 19:03
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* DONE Center
+  CLOSED: [2017-10-27 Fri 21:25]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-29 Sun 19:04
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE Add tests
+  CLOSED: [2017-10-29 Sun 19:03]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-29 Sun 19:04
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE Use cursor movement instead of whitespace when padding
+  CLOSED: [2017-10-26 Thu 22:21]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-29 Sun 19:04
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE Add build
+  CLOSED: [2017-10-29 Sun 19:03]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-10-29 Sun 19:04
+  :ARCHIVE_FILE: ~/src/oozz/TODOs.org
+  :ARCHIVE_CATEGORY: TODOs
+  :ARCHIVE_TODO: DONE
+  :END:

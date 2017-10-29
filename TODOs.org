@@ -1,10 +1,3 @@
 * TODO Ensure no two alike adjacent
 * TODO Support piping
-* DONE Center
-  CLOSED: [2017-10-27 Fri 21:25]
-* TODO Add tests
 * TODO Add on crates.io
-* DONE Use cursor movement instead of whitespace when padding
-  CLOSED: [2017-10-26 Thu 22:21]
-* TODO Add coverage
-* TODO Add build
