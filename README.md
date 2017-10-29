@@ -1,4 +1,4 @@
-![](resources/img/oozz.jpg)
+![](https://raw.githubusercontent.com/roosta/oozz/master/resources/img/oozz.jpg)
 [![Build Status](https://travis-ci.org/roosta/oozz.svg?branch=master)](https://travis-ci.org/roosta/oozz)
 
 Overview
@@ -7,13 +7,27 @@ Overview
 A CLI program that takes input and renders it in an ANSI art font, and
 adds some colored oozz.
 
-Requirements
-============
+## Requirements
 
 This program relies heavily on VT100 / VT52 ANSI escape codes so your
 terminal would have to support this. The output is meant for unicode
 terminals, no reservations are made for older terminals. Currently only
 tested on Linux.
+
+## Installation
+You can use the cargo install command:
+
+```sh
+cargo install oozz
+```
+
+Or alternatively, if you have rustc installed, you can build it like this:
+
+```sh
+cargo build --release
+```
+
+Then place the binary `target/release/oozz` somewhere on your `$path`
 
 Usage
 =====
