@@ -1,5 +1,6 @@
 extern crate oozz;
 extern crate clap;
+extern crate term_size;
 
 use std::process;
 use clap::{Arg, App};
@@ -36,9 +37,16 @@ fn main() {
     let input  = input.join(" ");
     let color  = matches.value_of("color").unwrap_or("green");
     let bold   = matches.is_present("bold");
-    let center =  matches.is_present("center");
-
-    match oozz::run(&input, &color, bold, center) {
+    let mut center =  matches.is_present("center");
+    let term_width = match term_size::dimensions() {
+        Some((term_width, _)) => term_width,
+        _ => {
+            eprintln!("Failed to get terminal dimensions, countinuing with no centering.");
+            center = false;
+            0
+        }
+    };
+    match oozz::run(&input, &color, bold, center, term_width) {
         Ok(result) => {
             for l in result {
                 println!("{}", l);

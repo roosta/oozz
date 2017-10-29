@@ -1,7 +1,6 @@
 extern crate rand;
 extern crate regex;
 extern crate clap;
-extern crate term_size;
 
 #[macro_use] extern crate lazy_static;
 
@@ -225,16 +224,15 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
-pub fn run(input: &str, color: &str, bold: bool, center: bool) -> Result<Vec<String>, Box<Error>> {
+pub fn run(input: &str, color: &str, bold: bool, center: bool, term_width: usize) -> Result<Vec<String>, Box<Error>> {
     let color = get_color_id(color)?;
     let chars = produce_chars(&input, color, bold)?;
     let oozz = produce_oozz(&input)?;
     let mut out: Vec<String> = Vec::new();
 
     if center {
-        let (width, _) = term_size::dimensions().ok_or("Failed to get terminal dimensions")?;
         let out_width = CHAR_WIDTH * input.chars().count();
-        let padding = (width - out_width - 4) / 2;
+        let padding = (term_width - out_width - 4) / 2;
         for c in chars {
             out.push(format!("\x1b[{}C{}", padding, c));
         }
