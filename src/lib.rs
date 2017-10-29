@@ -225,15 +225,12 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
-pub fn run(matches: &clap::ArgMatches) -> Result<(), Box<Error>> {
-
-    let values: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
-    let color = get_color_id(matches.value_of("color").unwrap_or("green"))?;
-    let bold = matches.is_present("bold");
-    let input = values.join(" ");
+pub fn run(input: String, color: &str, bold: bool, center: bool) -> Result<(), Box<Error>> {
+    let color = get_color_id(color)?;
     let chars = produce_chars(&input, color, bold)?;
     let oozz = produce_oozz(&input)?;
-    if matches.is_present("center") {
+
+    if center {
         let (width, _) = term_size::dimensions().ok_or("Failed to get terminal dimensions")?;
         let out_width = CHAR_WIDTH * input.chars().count();
         let padding = (width - out_width - 4) / 2;

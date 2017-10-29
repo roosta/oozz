@@ -32,7 +32,13 @@ fn main() {
              .multiple(true))
         .get_matches();
 
-    if let Err(e) = oozz::run(&matches) {
+    let input: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
+    let input  = input.join(" ");
+    let color  = matches.value_of("color").unwrap_or("green");
+    let bold   = matches.is_present("bold");
+    let center =  matches.is_present("center");
+
+    if let Err(e) = oozz::run(input, color, bold, center) {
         eprintln!("Application error: {}", e);
 
         process::exit(1);
