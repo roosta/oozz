@@ -1,10 +1,11 @@
 [package]
 name = "oozz"
-version = "0.3.3"
+version = "0.3.4"
 description = "A CLI program that takes input and renders it in an ANSI art font, and adds some colored oozz."
 authors = ["Daniel Berg <mail@roosta.sh>"]
 repository =  "https://github.com/roosta/oozz"
 documentation =  "https://github.com/roosta/oozz"
+readme = "README.md"
 keywords = ["ansi", "ascii", "art"]
 categories = ["command-line-utilities"]
 license = "GPL-3.0"
