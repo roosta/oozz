@@ -115,7 +115,7 @@ fn parse_oozz(input: &str) -> Vec<Vec<String>> {
         // capture all cursor forward padding in input string
         let mut captured_padding = 0;
         for cap in cursor_forward_re.captures_iter(line) {
-            captured_padding += &cap[2].parse::<usize>().expect("Failed to parse cursor_forward_re capture");
+            captured_padding = captured_padding + &cap[2].parse::<usize>().expect("Failed to parse cursor_forward_re capture");
         }
 
         // remove all escapes from input, and count chars
