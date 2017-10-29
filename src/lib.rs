@@ -225,27 +225,28 @@ fn get_color_id(color: &str) -> Result<u8, String> {
     }
 }
 
-pub fn run(input: &str, color: &str, bold: bool, center: bool) -> Result<(), Box<Error>> {
+pub fn run(input: &str, color: &str, bold: bool, center: bool) -> Result<Vec<String>, Box<Error>> {
     let color = get_color_id(color)?;
     let chars = produce_chars(&input, color, bold)?;
     let oozz = produce_oozz(&input)?;
+    let mut out: Vec<String> = Vec::new();
 
     if center {
         let (width, _) = term_size::dimensions().ok_or("Failed to get terminal dimensions")?;
         let out_width = CHAR_WIDTH * input.chars().count();
         let padding = (width - out_width - 4) / 2;
         for c in chars {
-            println!("\x1b[{}C{}", padding, c)
+            out.push(format!("\x1b[{}C{}", padding, c));
         }
         for o in oozz {
-            println!("\x1b[{}C{}", padding, o)
+            out.push(format!("\x1b[{}C{}", padding, o));
         }
     } else {
-        for c in chars {println!("{}", c);}
-        for o in oozz {println!("{}", o);}
+        for c in chars {out.push(format!("{}", c));}
+        for o in oozz {out.push(format!("{}", o));}
     };
 
-    Ok(())
+    Ok(out)
 }
 
 #[cfg(test)]

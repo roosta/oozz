@@ -38,9 +38,16 @@ fn main() {
     let bold   = matches.is_present("bold");
     let center =  matches.is_present("center");
 
-    if let Err(e) = oozz::run(&input, &color, bold, center) {
-        eprintln!("Application error: {}", e);
+    match oozz::run(&input, &color, bold, center) {
+        Ok(result) => {
+            for l in result {
+                println!("{}", l);
+            }
+        }
+        Err(e) => {
+            eprintln!("Application error: {}", e);
 
-        process::exit(1);
+            process::exit(1);
+        }
     }
 }
