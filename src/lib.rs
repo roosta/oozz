@@ -229,9 +229,9 @@ pub fn run(input: &str, color: &str, bold: bool, center: bool, term_width: usize
     let chars = produce_chars(&input, color, bold)?;
     let oozz = produce_oozz(&input)?;
     let mut out: Vec<String> = Vec::new();
+    let out_width = CHAR_WIDTH * input.chars().count();
 
-    if center {
-        let out_width = CHAR_WIDTH * input.chars().count();
+    if center && out_width < term_width {
         let padding = (term_width - out_width - 4) / 2;
         for c in chars {
             out.push(format!("\x1b[{}C{}", padding, c));
