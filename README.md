@@ -1,5 +1,6 @@
 ![](https://raw.githubusercontent.com/roosta/oozz/master/resources/img/oozz.jpg)
 [![Build Status](https://travis-ci.org/roosta/oozz.svg?branch=master)](https://travis-ci.org/roosta/oozz)
+[![Crates.io](https://img.shields.io/crates/v/oozz.svg)](https://crates.io/crates/oozz)
 
 Overview
 ========
