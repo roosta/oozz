@@ -5,35 +5,37 @@
 Overview
 ========
 
-A CLI program that takes input and renders it in an ANSI art font, and
+A CLI program that takes text and renders it in an ANSI art font, and
 adds some colored oozz.
 
 ## Requirements
 
-This program relies heavily on VT100 / VT52 ANSI escape codes so your
-terminal would have to support this. The output is meant for unicode
-terminals, no reservations are made for older terminals. Currently only
-tested on Linux.
+This program relies heavily on VT100 ANSI escape codes so your terminal would
+have to support this. The output is intended for modern unicode terminals but
+works in the virtual console, so long as the font has the required glyphs (box
+drawing characters).
 
 ## Installation
-You can use the cargo install command:
+[Rust](https://www.rust-lang.org/en-US/), and [Cargo](http://doc.crates.io/) is
+required, and `oozz` can be installed using cargo like so:
 
 ```sh
 cargo install oozz
 ```
 
-Or alternatively, if you have rustc installed, you can build it like this:
+Or alternatively, you can build a release binary,
 
 ```sh
 cargo build --release
 ```
 
-Then place the binary `target/release/oozz` somewhere on your `$path`
+Then place said binary, located at `target/release/oozz`, somewhere on your `$path`.
+
 
 Usage
 =====
 
-Basic usage would be simply calling oozz and the remaining input is
+Basic usage would be calling `oozz` and the remaining input is
 treated as a string
 
 ```sh
@@ -46,22 +48,17 @@ limited at the moment, but I plan to add more.
 Options
 =======
 
-Aside from the green color used by default you can use any of the 16
-colors supported by your terminal, with a combination of the color
-option `--color
-  black|red|green|yellow|blue|magenta|cyan|white` and the `--bold` flag.
-
-Another option is the ability to center text using either `-C` or
-`--center` This is by no means foolproof, and if the program fails to
-get the width of the terminal, it prints an error message and continues
-without centering.
+* **-c --color**: change the color of the 'oozz', to one of the 8 colors
+  supported by your terminal. Valid values are one of `black|red|green|yellow|blue|magenta|cyan|white`
+* **-b --bold**: use the bold variant of the chosen color.
+* **-C --center** center output horizontally on screen, if possible.
 
 Building
 ========
 
 Requires [Rust](https://www.rust-lang.org/en-US/) and
-[Cargo](http://doc.crates.io/) installed on system, and is built like
-so:
+[Cargo](http://doc.crates.io/) installed on system, and can be built like
+this:
 
 ```sh
 cargo build
