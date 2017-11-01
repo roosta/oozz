@@ -244,6 +244,7 @@ pub fn run(input: &str, color: &str, bold: bool, center: bool, term_width: usize
         for o in oozz {out.push(format!("{}", o));}
     };
 
+    out.push(String::from("\x1b[0m"));
     Ok(out)
 }
 
