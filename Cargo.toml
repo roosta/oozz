@@ -1,6 +1,6 @@
 [package]
 name = "oozz"
-version = "0.3.4"
+version = "0.3.5"
 description = "A CLI program that takes input and renders it in an ANSI art font, and adds some colored oozz."
 authors = ["Daniel Berg <mail@roosta.sh>"]
 repository =  "https://github.com/roosta/oozz"

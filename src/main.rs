@@ -7,7 +7,7 @@ use clap::{Arg, App};
 
 fn main() {
     let matches = App::new("Oozz")
-        .version("0.3.4")
+        .version("0.3.5")
         .author("Daniel Berg <mail@roosta.sh>")
         .about("ANSI art font rendering, with some added oozz")
         .arg(Arg::with_name("bold")
