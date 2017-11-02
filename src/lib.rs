@@ -15,7 +15,7 @@ const LETTER_HEIGHT: usize = 17;
 const OOZZ_HEIGHT: usize = 22;
 
 // Available letters in font
-pub const LETTERS: &'static str = "abcdefghijklmnopqrstuvwxyz.! ";
+pub const LETTERS: &'static str = "abcdefghijklmnopqrstuvwxyz.! /";
 
 const CHARS: &'static str = include_str!("../resources/chars.latin1");
 const EXTRA: &'static str = include_str!("../resources/extra.latin1");
@@ -31,11 +31,11 @@ const CHAR_WIDTH: usize = 18;
 /// validate input characters, ensure they are part of the allowed set
 pub fn valid_chars(v: String) -> Result<(), String> {
     lazy_static! {
-        static ref VALID_RE: Regex = Regex::new(r"[^a-zA-Z\s!\.]").unwrap();
+        static ref VALID_RE: Regex = Regex::new(r"[^a-zA-Z\s!\./]").unwrap();
     }
     match VALID_RE.captures(&v[..]) {
         None => Ok(()),
-        Some(cap) => Err(format!("Unsupported character: {}", &cap[0]))
+        Some(cap) => Err(format!("Unsupported character: {:#?}", cap))
     }
 }
 
