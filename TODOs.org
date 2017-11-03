@@ -1,3 +1,2 @@
 * TODO Ensure no two alike adjacent
 * TODO Support piping
-* TODO Add on crates.io
