@@ -15,7 +15,7 @@ const LETTER_HEIGHT: usize = 17;
 const OOZZ_HEIGHT: usize = 22;
 
 // Available letters in font
-pub const LETTERS: &'static str = "abcdefghijklmnopqrstuvwxyz.! /\'\"_$1234567890";
+pub const LETTERS: &'static str = "abcdefghijklmnopqrstuvwxyz.! /'\"_$1234567890";
 
 const CHARS: &'static str = include_str!("../resources/chars.latin1");
 const EXTRA: &'static str = include_str!("../resources/extra.latin1");
