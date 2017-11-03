@@ -42,7 +42,10 @@ treated as a string
 oozz some text
 ```
 
-Supported characters are currently: abcdefghijklmnopqrstuvwxyz.! '"_$1234567890
+Supported characters are currently:
+ - `a-z`
+ - `0-9`
+ - `.` `!` `'` `"` `_` `$` `/`
 
 Options
 =======
