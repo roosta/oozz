@@ -9,6 +9,7 @@ readme = "README.md"
 keywords = ["ansi", "ascii", "art"]
 categories = ["command-line-utilities"]
 license = "GPL-3.0"
+exclude = ["TODOs.org*", "script"]
 
 [badges]
 travis-ci = { repository = "roosta/oozz" }
