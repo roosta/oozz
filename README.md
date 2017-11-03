@@ -42,9 +42,7 @@ treated as a string
 oozz some text
 ```
 
-Supported characters are: `abcdefghijklmnopqrstuvwxyz. !` This somewhat
-limited at the moment, but I plan to add more.
-
+Supported characters are currently: `abcdefghijklmnopqrstuvwxyz.! '"_$1234567890`
 Options
 =======
 
@@ -74,3 +72,9 @@ filetypes. Just edit something and run:
 ```sh
 make
 ```
+
+I use [PabloDraw](http://picoe.ca/products/pablodraw/) to draw the ANSI art, and
+save the files in .ans format that uses
+[CP437](https://en.wikipedia.org/wiki/Code_page_437) encoding. The makefile does
+the conversion to latin1 as well as a search and replace that sets the bold flag
+for all the letters.
