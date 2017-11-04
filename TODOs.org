@@ -1,2 +1,8 @@
 * TODO Ensure no two alike adjacent
+  1. create array with equal size of input chars
+  2. generate from available range of indexes in oozz vector [0...length of oozz]
+  3. loop over array to ensure no adjacent ~n != n - 1~
+     A. Generate new if adjacent matches
+  3. returned array is indexes for the chosen oozz
+** [[https://stackoverflow.com/questions/23747810/store-random-numbers-in-an-array-without-adjacent-repeats][java - Store random numbers in an array without adjacent repeats - Stack Overflow]]
 * TODO Support piping
