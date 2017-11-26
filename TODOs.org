@@ -6,3 +6,4 @@
   3. returned array is indexes for the chosen oozz
 ** [[https://stackoverflow.com/questions/23747810/store-random-numbers-in-an-array-without-adjacent-repeats][java - Store random numbers in an array without adjacent repeats - Stack Overflow]]
 * TODO Support piping
+* TODO Support wrapping
