@@ -80,5 +80,5 @@ make
 I use [PabloDraw](http://picoe.ca/products/pablodraw/) to draw the ANSI art, and
 save the files in .ans format that uses
 [CP437](https://en.wikipedia.org/wiki/Code_page_437) encoding. The makefile does
-the conversion to latin1 as well as a search and replace that sets the bold flag
-for all the letters.
+the conversion to latin1 as well as a search and replace that sets default
+foreground for all the letters.
