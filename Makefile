@@ -7,5 +7,5 @@ all: $(LATIN1)
 
 $(DIR)/%.latin1: $(DIR)/%.ans
 	# recode 437 < $< > $@
-	recode 437 < $< | sed -e 's/\[37m/\[1;37m/g' > $@
+	recode 437 < $< | sed -e 's/\[37m/\[1;39m/g' > $@
 
