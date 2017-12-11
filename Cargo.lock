@@ -91,7 +91,7 @@ dependencies = [
 
 [[package]]
 name = "oozz"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "clap 2.27.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 0.2.9 (registry+https://github.com/rust-lang/crates.io-index)",
