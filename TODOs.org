@@ -8,3 +8,4 @@
 * TODO Support piping
 * TODO Support wrapping
 * TODO Don't use monospace
+* TODO Add no color opt
